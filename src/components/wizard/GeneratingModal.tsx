@@ -40,10 +40,18 @@ export default function GeneratingModal({ isOpen }: GeneratingModalProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed z-50 inset-0 overflow-y-auto">
+    <div
+      className="fixed z-50 inset-0 overflow-y-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="generating-title"
+    >
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <div
+          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          aria-hidden="true"
+        ></div>
 
         {/* Center modal */}
         <span
@@ -59,11 +67,18 @@ export default function GeneratingModal({ isOpen }: GeneratingModalProps) {
               <Spinner size="lg" />
             </div>
             <div className="mt-3 text-center sm:mt-5">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-2">
+              <h3
+                id="generating-title"
+                className="text-lg leading-6 font-medium text-gray-900 mb-2"
+              >
                 Creating Your Itinerary
               </h3>
               <div className="mt-2">
-                <p className="text-sm text-gray-500 min-h-[40px] flex items-center justify-center">
+                <p
+                  className="text-sm text-gray-500 min-h-[40px] flex items-center justify-center"
+                  aria-live="polite"
+                  aria-atomic="true"
+                >
                   {PROGRESS_MESSAGES[messageIndex]}
                 </p>
               </div>
