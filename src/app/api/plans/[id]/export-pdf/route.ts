@@ -71,21 +71,21 @@ export async function GET(
     };
 
     // Generate PDF
-    const pdfBuffer = await generateBeautifulPDF(pdfData);
+    const pdfBytes = await generateBeautifulPDF(pdfData);
 
     // Create filename
     const filename = `${plan.planName.replace(/[^a-z0-9]/gi, '_')}_Travel_Plan.pdf`;
 
-    // Convert Buffer to Uint8Array for Response
-    const uint8Array = new Uint8Array(pdfBuffer);
+    // Convert Uint8Array to Buffer for Response
+    const buffer = Buffer.from(pdfBytes);
 
     // Return PDF with proper headers
-    return new Response(uint8Array, {
+    return new Response(buffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
         'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Length': pdfBuffer.length.toString(),
+        'Content-Length': buffer.length.toString(),
       },
     });
   } catch (error) {

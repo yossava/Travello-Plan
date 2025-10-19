@@ -1,4 +1,4 @@
-import PDFDocument from 'pdfkit';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 
 interface TravelPlanData {
   planName: string;
@@ -91,587 +91,628 @@ interface TravelPlanData {
 }
 
 const COLORS = {
-  primary: '#7c3aed', // purple-600
-  secondary: '#a78bfa', // purple-400
-  accent: '#ec4899', // pink-500
-  dark: '#1e293b', // slate-800
-  light: '#f1f5f9', // slate-100
-  text: '#0f172a', // slate-900
-  textLight: '#64748b', // slate-500
-  success: '#10b981', // green-500
-  warning: '#f59e0b', // amber-500
-  danger: '#ef4444', // red-500
+  primary: rgb(0.486, 0.227, 0.929), // purple-600
+  secondary: rgb(0.655, 0.545, 0.980), // purple-400
+  accent: rgb(0.925, 0.282, 0.600), // pink-500
+  dark: rgb(0.118, 0.161, 0.231), // slate-800
+  light: rgb(0.945, 0.961, 0.976), // slate-100
+  text: rgb(0.059, 0.090, 0.165), // slate-900
+  textLight: rgb(0.392, 0.282, 0.545), // slate-500
+  success: rgb(0.063, 0.725, 0.506), // green-500
+  warning: rgb(0.961, 0.620, 0.043), // amber-500
+  danger: rgb(0.937, 0.267, 0.267), // red-500
+  white: rgb(1, 1, 1),
+  black: rgb(0, 0, 0),
 };
 
 export async function generateBeautifulPDF(
   planData: TravelPlanData
-): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({
-      size: 'A4',
-      margins: { top: 50, bottom: 50, left: 50, right: 50 },
-      info: {
-        Title: planData.planName,
-        Author: 'TravelPlanner AI',
-        Subject: 'Travel Itinerary',
-      },
-    });
+): Promise<Uint8Array> {
+  const pdfDoc = await PDFDocument.create();
+  const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    const buffers: Buffer[] = [];
-    doc.on('data', buffers.push.bind(buffers));
-    doc.on('end', () => {
-      const pdfBuffer = Buffer.concat(buffers);
-      resolve(pdfBuffer);
-    });
-    doc.on('error', reject);
+  const pageWidth = 595.28; // A4 width
+  const pageHeight = 841.89; // A4 height
+  const margin = 50;
+  const contentWidth = pageWidth - 2 * margin;
 
-    const pageWidth = doc.page.width - 100; // Account for margins
+  let currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+  let yPosition = pageHeight - margin;
 
-    // Helper functions
-    const drawGradientHeader = () => {
-      // Gradient background for header
-      doc
-        .rect(0, 0, doc.page.width, 120)
-        .fillAndStroke(COLORS.primary, COLORS.primary);
+  // Helper functions
+  const addNewPage = () => {
+    currentPage = pdfDoc.addPage([pageWidth, pageHeight]);
+    yPosition = pageHeight - margin;
+    return yPosition;
+  };
 
-      // Add decorative element
-      doc
-        .rect(0, 115, doc.page.width, 5)
-        .fillAndStroke(COLORS.accent, COLORS.accent);
-    };
+  const checkPageSpace = (required: number) => {
+    if (yPosition - required < margin) {
+      addNewPage();
+    }
+  };
 
-    const drawSectionHeader = (title: string, y: number, icon?: string) => {
-      doc.fontSize(18).fillColor(COLORS.primary).font('Helvetica-Bold');
-      if (icon) {
-        doc.text(icon + ' ' + title, 50, y);
-      } else {
-        doc.text(title, 50, y);
-      }
-      doc
-        .moveTo(50, y + 25)
-        .lineTo(doc.page.width - 50, y + 25)
-        .strokeColor(COLORS.secondary)
-        .lineWidth(2)
-        .stroke();
-      return y + 35;
-    };
+  const drawText = (
+    text: string,
+    x: number,
+    y: number,
+    options: {
+      size?: number;
+      font?: typeof helveticaFont;
+      color?: typeof COLORS.text;
+      maxWidth?: number;
+    } = {}
+  ) => {
+    const {
+      size = 12,
+      font = helveticaFont,
+      color = COLORS.text,
+      maxWidth,
+    } = options;
 
-    const addTextWithLabel = (
-      label: string,
-      value: string,
-      x: number,
-      y: number
-    ) => {
-      doc
-        .fontSize(10)
-        .fillColor(COLORS.textLight)
-        .font('Helvetica-Bold')
-        .text(label + ':', x, y);
-      doc
-        .fillColor(COLORS.text)
-        .font('Helvetica')
-        .text(value, x + 100, y, { width: pageWidth - 100 });
-      return y + 20;
-    };
-
-    const checkPageBreak = (requiredSpace: number) => {
-      if (doc.y + requiredSpace > doc.page.height - 50) {
-        doc.addPage();
-        return 50;
-      }
-      return doc.y;
-    };
-
-    // Page 1: Cover & Overview
-    drawGradientHeader();
-
-    // Title
-    doc
-      .fontSize(28)
-      .fillColor('#ffffff')
-      .font('Helvetica-Bold')
-      .text(planData.planName, 50, 40, {
-        align: 'center',
-        width: pageWidth,
-      });
-
-    doc
-      .fontSize(14)
-      .fillColor('#e0e7ff')
-      .font('Helvetica')
-      .text(
-        `${planData.destination.city}, ${planData.destination.country}`,
-        50,
-        75,
-        {
-          align: 'center',
-          width: pageWidth,
+    let displayText = text;
+    if (maxWidth) {
+      const textWidth = font.widthOfTextAtSize(text, size);
+      if (textWidth > maxWidth) {
+        // Truncate text if too long
+        let truncated = text;
+        while (font.widthOfTextAtSize(truncated + '...', size) > maxWidth) {
+          truncated = truncated.slice(0, -1);
         }
-      );
+        displayText = truncated + '...';
+      }
+    }
 
-    let yPos = 150;
+    currentPage.drawText(displayText, {
+      x,
+      y,
+      size,
+      font,
+      color,
+    });
+  };
 
-    // Trip Overview Box
-    doc
-      .roundedRect(50, yPos, pageWidth, 150, 10)
-      .fillAndStroke(COLORS.light, COLORS.secondary);
+  const drawBox = (
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    options: {
+      fill?: typeof COLORS.light;
+      border?: typeof COLORS.primary;
+      borderWidth?: number;
+    } = {}
+  ) => {
+    const { fill, border, borderWidth = 1 } = options;
 
-    yPos += 20;
-    doc.fontSize(16).fillColor(COLORS.primary).font('Helvetica-Bold');
-    doc.text('✈️ Trip Overview', 70, yPos);
-    yPos += 30;
+    if (fill) {
+      currentPage.drawRectangle({
+        x,
+        y,
+        width,
+        height,
+        color: fill,
+      });
+    }
 
-    doc.fontSize(11).fillColor(COLORS.text).font('Helvetica');
-    const totalTravelers =
-      planData.travelers.adults +
-      planData.travelers.children +
-      planData.travelers.infants;
+    if (border) {
+      currentPage.drawRectangle({
+        x,
+        y,
+        width,
+        height,
+        borderColor: border,
+        borderWidth,
+      });
+    }
+  };
 
-    yPos = addTextWithLabel(
-      'From',
-      `${planData.origin.city}, ${planData.origin.country}`,
-      70,
-      yPos
+  // Title Page
+  drawBox(0, pageHeight - 120, pageWidth, 120, { fill: COLORS.primary });
+
+  drawText(planData.planName, pageWidth / 2, pageHeight - 60, {
+    size: 24,
+    font: helveticaBold,
+    color: COLORS.white,
+    maxWidth: contentWidth,
+  });
+
+  // Center text manually (pdf-lib doesn't have align:center)
+  const subtitleText = `${planData.destination.city}, ${planData.destination.country}`;
+  const subtitleWidth = helveticaFont.widthOfTextAtSize(subtitleText, 14);
+  drawText(subtitleText, (pageWidth - subtitleWidth) / 2, pageHeight - 90, {
+    size: 14,
+    color: COLORS.white,
+  });
+
+  yPosition = pageHeight - 160;
+
+  // Trip Overview Box
+  checkPageSpace(200);
+  drawBox(margin, yPosition - 180, contentWidth, 180, {
+    fill: COLORS.light,
+    border: COLORS.secondary,
+    borderWidth: 2,
+  });
+
+  yPosition -= 30;
+  drawText('✈️ Trip Overview', margin + 20, yPosition, {
+    size: 16,
+    font: helveticaBold,
+    color: COLORS.primary,
+  });
+
+  yPosition -= 30;
+  const totalTravelers =
+    planData.travelers.adults +
+    planData.travelers.children +
+    planData.travelers.infants;
+
+  const addInfoLine = (label: string, value: string) => {
+    drawText(label + ':', margin + 20, yPosition, {
+      size: 11,
+      font: helveticaBold,
+      color: COLORS.textLight,
+    });
+    drawText(value, margin + 120, yPosition, {
+      size: 11,
+      maxWidth: contentWidth - 120,
+    });
+    yPosition -= 20;
+  };
+
+  addInfoLine(
+    'From',
+    `${planData.origin.city}, ${planData.origin.country}`
+  );
+  addInfoLine(
+    'To',
+    `${planData.destination.city}, ${planData.destination.country}`
+  );
+  addInfoLine(
+    'Departure',
+    new Date(planData.departureDate).toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  );
+  addInfoLine(
+    'Return',
+    new Date(planData.returnDate).toLocaleDateString('en-US', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    })
+  );
+  addInfoLine('Duration', `${planData.duration} days`);
+  addInfoLine('Travelers', `${totalTravelers} people`);
+
+  yPosition -= 30;
+
+  // Emergency Contacts
+  if (planData.itinerary.travelInfo?.emergencyContacts) {
+    checkPageSpace(150);
+    drawBox(margin, yPosition - 130, contentWidth, 130, {
+      fill: rgb(0.996, 0.949, 0.949),
+      border: COLORS.danger,
+      borderWidth: 2,
+    });
+
+    yPosition -= 30;
+    drawText('🚨 Emergency Contacts', margin + 20, yPosition, {
+      size: 14,
+      font: helveticaBold,
+      color: COLORS.danger,
+    });
+
+    yPosition -= 30;
+    addInfoLine(
+      'Police',
+      planData.itinerary.travelInfo.emergencyContacts.police
     );
-    yPos = addTextWithLabel(
-      'To',
-      `${planData.destination.city}, ${planData.destination.country}`,
-      70,
-      yPos
+    addInfoLine(
+      'Ambulance',
+      planData.itinerary.travelInfo.emergencyContacts.ambulance
     );
-    yPos = addTextWithLabel(
+    addInfoLine(
+      'Embassy',
+      planData.itinerary.travelInfo.emergencyContacts.embassy
+    );
+
+    yPosition -= 30;
+  }
+
+  // Flights Section
+  if (planData.itinerary.flights) {
+    addNewPage();
+
+    drawText('✈️ Flight Information', margin, yPosition, {
+      size: 18,
+      font: helveticaBold,
+      color: COLORS.primary,
+    });
+
+    yPosition -= 40;
+
+    // Outbound Flight
+    checkPageSpace(160);
+    drawBox(margin, yPosition - 140, contentWidth, 140, {
+      fill: rgb(0.937, 0.965, 1),
+      border: rgb(0.231, 0.510, 0.965),
+      borderWidth: 2,
+    });
+
+    yPosition -= 30;
+    drawText('→ Outbound Flight', margin + 20, yPosition, {
+      size: 14,
+      font: helveticaBold,
+      color: rgb(0.118, 0.251, 0.690),
+    });
+
+    yPosition -= 30;
+    addInfoLine(
+      'Airline',
+      `${planData.itinerary.flights.outbound.airline} - ${planData.itinerary.flights.outbound.flightNumber}`
+    );
+    addInfoLine(
       'Departure',
-      new Date(planData.departureDate).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-      70,
-      yPos
+      `${planData.itinerary.flights.outbound.departure.airport} at ${planData.itinerary.flights.outbound.departure.time}`
     );
-    yPos = addTextWithLabel(
-      'Return',
-      new Date(planData.returnDate).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-      70,
-      yPos
+    addInfoLine(
+      'Arrival',
+      `${planData.itinerary.flights.outbound.arrival.airport} at ${planData.itinerary.flights.outbound.arrival.time}`
     );
-    yPos = addTextWithLabel(
-      'Duration',
-      `${planData.duration} days`,
-      70,
-      yPos
+    addInfoLine('Duration', planData.itinerary.flights.outbound.duration);
+
+    yPosition -= 40;
+
+    // Return Flight
+    checkPageSpace(160);
+    drawBox(margin, yPosition - 140, contentWidth, 140, {
+      fill: rgb(0.996, 0.953, 0.780),
+      border: COLORS.warning,
+      borderWidth: 2,
+    });
+
+    yPosition -= 30;
+    drawText('← Return Flight', margin + 20, yPosition, {
+      size: 14,
+      font: helveticaBold,
+      color: rgb(0.706, 0.325, 0.035),
+    });
+
+    yPosition -= 30;
+    addInfoLine(
+      'Airline',
+      `${planData.itinerary.flights.return.airline} - ${planData.itinerary.flights.return.flightNumber}`
     );
-    yPos = addTextWithLabel('Travelers', `${totalTravelers} people`, 70, yPos);
+    addInfoLine(
+      'Departure',
+      `${planData.itinerary.flights.return.departure.airport} at ${planData.itinerary.flights.return.departure.time}`
+    );
+    addInfoLine(
+      'Arrival',
+      `${planData.itinerary.flights.return.arrival.airport} at ${planData.itinerary.flights.return.arrival.time}`
+    );
+    addInfoLine('Duration', planData.itinerary.flights.return.duration);
 
-    yPos += 30;
+    yPosition -= 40;
+  }
 
-    // Emergency Contacts
-    if (planData.itinerary.travelInfo?.emergencyContacts) {
-      yPos = checkPageBreak(120);
-      doc
-        .roundedRect(50, yPos, pageWidth, 110, 10)
-        .fillAndStroke('#fef2f2', '#ef4444');
+  // Accommodation
+  if (planData.itinerary.accommodation) {
+    checkPageSpace(200);
 
-      yPos += 20;
-      doc.fontSize(14).fillColor(COLORS.danger).font('Helvetica-Bold');
-      doc.text('🚨 Emergency Contacts', 70, yPos);
-      yPos += 25;
+    drawText('🏨 Accommodation', margin, yPosition, {
+      size: 18,
+      font: helveticaBold,
+      color: COLORS.primary,
+    });
 
-      doc.fontSize(11).fillColor(COLORS.text).font('Helvetica');
-      yPos = addTextWithLabel(
-        'Police',
-        planData.itinerary.travelInfo.emergencyContacts.police,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Ambulance',
-        planData.itinerary.travelInfo.emergencyContacts.ambulance,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Embassy',
-        planData.itinerary.travelInfo.emergencyContacts.embassy,
-        70,
-        yPos
-      );
+    yPosition -= 40;
 
-      yPos += 30;
-    }
+    drawBox(margin, yPosition - 160, contentWidth, 160, {
+      fill: rgb(0.941, 0.992, 0.957),
+      border: COLORS.success,
+      borderWidth: 2,
+    });
 
-    // Flights
-    if (planData.itinerary.flights) {
-      doc.addPage();
-      yPos = drawSectionHeader('✈️ Flight Information', 50);
+    yPosition -= 30;
+    drawText(planData.itinerary.accommodation.primary.name, margin + 20, yPosition, {
+      size: 14,
+      font: helveticaBold,
+      color: rgb(0.016, 0.463, 0.341),
+      maxWidth: contentWidth - 40,
+    });
 
-      // Outbound Flight
-      yPos = checkPageBreak(160);
-      doc
-        .roundedRect(50, yPos, pageWidth, 140, 10)
-        .fillAndStroke('#eff6ff', '#3b82f6');
+    yPosition -= 30;
+    addInfoLine('Type', planData.itinerary.accommodation.primary.type);
+    addInfoLine('Address', planData.itinerary.accommodation.primary.address);
+    addInfoLine(
+      'Check-in',
+      new Date(
+        planData.itinerary.accommodation.primary.checkIn
+      ).toLocaleDateString()
+    );
+    addInfoLine(
+      'Check-out',
+      new Date(
+        planData.itinerary.accommodation.primary.checkOut
+      ).toLocaleDateString()
+    );
+    addInfoLine(
+      'Total',
+      `${planData.budget.currency} ${planData.itinerary.accommodation.primary.totalCost.toLocaleString()}`
+    );
 
-      yPos += 20;
-      doc.fontSize(14).fillColor('#1e40af').font('Helvetica-Bold');
-      doc.text('→ Outbound Flight', 70, yPos);
-      yPos += 25;
+    yPosition -= 40;
+  }
 
-      doc.fontSize(11).fillColor(COLORS.text).font('Helvetica');
-      yPos = addTextWithLabel(
-        'Airline',
-        `${planData.itinerary.flights.outbound.airline} - ${planData.itinerary.flights.outbound.flightNumber}`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Departure',
-        `${planData.itinerary.flights.outbound.departure.airport} at ${planData.itinerary.flights.outbound.departure.time}${planData.itinerary.flights.outbound.departure.terminal ? ' (Terminal ' + planData.itinerary.flights.outbound.departure.terminal + ')' : ''}`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Arrival',
-        `${planData.itinerary.flights.outbound.arrival.airport} at ${planData.itinerary.flights.outbound.arrival.time}${planData.itinerary.flights.outbound.arrival.terminal ? ' (Terminal ' + planData.itinerary.flights.outbound.arrival.terminal + ')' : ''}`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Duration',
-        planData.itinerary.flights.outbound.duration,
-        70,
-        yPos
-      );
-      if (planData.itinerary.flights.outbound.class) {
-        yPos = addTextWithLabel(
-          'Class',
-          planData.itinerary.flights.outbound.class,
-          70,
-          yPos
-        );
-      }
+  // Daily Itinerary
+  if (
+    planData.itinerary.dailyItinerary &&
+    planData.itinerary.dailyItinerary.length > 0
+  ) {
+    addNewPage();
 
-      yPos += 30;
+    drawText('📅 Daily Itinerary', margin, yPosition, {
+      size: 18,
+      font: helveticaBold,
+      color: COLORS.primary,
+    });
 
-      // Return Flight
-      yPos = checkPageBreak(160);
-      doc
-        .roundedRect(50, yPos, pageWidth, 140, 10)
-        .fillAndStroke('#fef3c7', '#f59e0b');
+    yPosition -= 40;
 
-      yPos += 20;
-      doc.fontSize(14).fillColor('#b45309').font('Helvetica-Bold');
-      doc.text('← Return Flight', 70, yPos);
-      yPos += 25;
+    planData.itinerary.dailyItinerary.forEach((day) => {
+      checkPageSpace(100);
 
-      doc.fontSize(11).fillColor(COLORS.text).font('Helvetica');
-      yPos = addTextWithLabel(
-        'Airline',
-        `${planData.itinerary.flights.return.airline} - ${planData.itinerary.flights.return.flightNumber}`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Departure',
-        `${planData.itinerary.flights.return.departure.airport} at ${planData.itinerary.flights.return.departure.time}${planData.itinerary.flights.return.departure.terminal ? ' (Terminal ' + planData.itinerary.flights.return.departure.terminal + ')' : ''}`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Arrival',
-        `${planData.itinerary.flights.return.arrival.airport} at ${planData.itinerary.flights.return.arrival.time}${planData.itinerary.flights.return.arrival.terminal ? ' (Terminal ' + planData.itinerary.flights.return.arrival.terminal + ')' : ''}`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Duration',
-        planData.itinerary.flights.return.duration,
-        70,
-        yPos
-      );
-      if (planData.itinerary.flights.return.class) {
-        yPos = addTextWithLabel(
-          'Class',
-          planData.itinerary.flights.return.class,
-          70,
-          yPos
-        );
-      }
-
-      yPos += 30;
-    }
-
-    // Accommodation
-    if (planData.itinerary.accommodation) {
-      yPos = checkPageBreak(200);
-      if (yPos === 50) {
-        yPos = drawSectionHeader('🏨 Accommodation', 50);
-      } else {
-        yPos = drawSectionHeader('🏨 Accommodation', yPos + 20);
-      }
-
-      doc
-        .roundedRect(50, yPos, pageWidth, 180, 10)
-        .fillAndStroke('#f0fdf4', '#10b981');
-
-      yPos += 20;
-      doc.fontSize(14).fillColor('#047857').font('Helvetica-Bold');
-      doc.text(planData.itinerary.accommodation.primary.name, 70, yPos, {
-        width: pageWidth - 40,
+      // Day header
+      drawBox(margin, yPosition - 50, contentWidth, 50, {
+        fill: rgb(0.980, 0.961, 1),
+        border: COLORS.secondary,
+        borderWidth: 2,
       });
-      yPos += 25;
 
-      doc.fontSize(11).fillColor(COLORS.text).font('Helvetica');
-      yPos = addTextWithLabel(
-        'Type',
-        planData.itinerary.accommodation.primary.type,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Address',
-        planData.itinerary.accommodation.primary.address,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Check-in',
-        new Date(
-          planData.itinerary.accommodation.primary.checkIn
-        ).toLocaleDateString(),
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Check-out',
-        new Date(
-          planData.itinerary.accommodation.primary.checkOut
-        ).toLocaleDateString(),
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Nights',
-        `${planData.itinerary.accommodation.primary.nights} nights`,
-        70,
-        yPos
-      );
-      yPos = addTextWithLabel(
-        'Total Cost',
-        `${planData.budget.currency} ${planData.itinerary.accommodation.primary.totalCost.toLocaleString()}`,
-        70,
-        yPos
-      );
-
-      yPos += 30;
-    }
-
-    // Daily Itinerary
-    if (
-      planData.itinerary.dailyItinerary &&
-      planData.itinerary.dailyItinerary.length > 0
-    ) {
-      doc.addPage();
-      yPos = drawSectionHeader('📅 Daily Itinerary', 50);
-
-      planData.itinerary.dailyItinerary.forEach((day, index) => {
-        yPos = checkPageBreak(200);
-        if (yPos === 50 && index > 0) {
-          yPos += 10;
+      yPosition -= 20;
+      drawText(
+        `Day ${day.day} - ${new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`,
+        margin + 20,
+        yPosition,
+        {
+          size: 14,
+          font: helveticaBold,
+          color: COLORS.primary,
         }
+      );
 
-        // Day header
-        doc
-          .roundedRect(50, yPos, pageWidth, 50, 10)
-          .fillAndStroke('#faf5ff', COLORS.secondary);
+      if (day.theme) {
+        yPosition -= 18;
+        drawText(day.theme, margin + 20, yPosition, {
+          size: 10,
+          color: COLORS.textLight,
+        });
+      }
 
-        yPos += 15;
-        doc.fontSize(14).fillColor(COLORS.primary).font('Helvetica-Bold');
-        doc.text(
-          `Day ${day.day} - ${new Date(day.date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}`,
-          70,
-          yPos
-        );
+      yPosition -= 30;
 
-        if (day.theme) {
-          yPos += 20;
-          doc.fontSize(10).fillColor(COLORS.textLight).font('Helvetica-Italic');
-          doc.text(day.theme, 70, yPos);
-        }
+      // Activities (limit to first 5 to keep PDF reasonable)
+      const activitiesToShow = day.activities.slice(0, 5);
+      activitiesToShow.forEach((activity) => {
+        checkPageSpace(80);
 
-        yPos += 35;
-
-        // Activities
-        day.activities.forEach((activity) => {
-          yPos = checkPageBreak(80);
-
-          // Activity box
-          doc
-            .roundedRect(50, yPos, pageWidth, 70, 5)
-            .fillAndStroke('#ffffff', COLORS.light);
-
-          yPos += 12;
-
-          // Time badge
-          doc
-            .roundedRect(60, yPos, 60, 20, 5)
-            .fillAndStroke(COLORS.primary, COLORS.primary);
-          doc.fontSize(9).fillColor('#ffffff').font('Helvetica-Bold');
-          doc.text(activity.time, 60, yPos + 5, { width: 60, align: 'center' });
-
-          // Title
-          doc.fontSize(11).fillColor(COLORS.text).font('Helvetica-Bold');
-          doc.text(activity.title, 130, yPos + 3, {
-            width: pageWidth - 150,
-          });
-
-          yPos += 25;
-
-          // Location and duration
-          doc.fontSize(9).fillColor(COLORS.textLight).font('Helvetica');
-          doc.text(`📍 ${activity.location}`, 60, yPos);
-          doc.text(`⏱️ ${activity.duration}`, 280, yPos);
-          doc.text(
-            `${planData.budget.currency} ${activity.cost}`,
-            doc.page.width - 130,
-            yPos
-          );
-
-          yPos += 15;
-
-          // Description
-          if (activity.description) {
-            doc.fontSize(9).fillColor(COLORS.text).font('Helvetica');
-            doc.text(activity.description, 60, yPos, {
-              width: pageWidth - 20,
-            });
-          }
-
-          yPos += 25;
+        drawBox(margin, yPosition - 70, contentWidth, 70, {
+          fill: COLORS.white,
+          border: COLORS.light,
+          borderWidth: 1,
         });
 
-        // Daily total
-        yPos = checkPageBreak(30);
-        doc
-          .roundedRect(doc.page.width - 180, yPos, 130, 25, 5)
-          .fillAndStroke('#ecfdf5', '#10b981');
-        doc.fontSize(11).fillColor('#047857').font('Helvetica-Bold');
-        doc.text(
-          `Daily Total: ${planData.budget.currency} ${day.dailyTotal.toLocaleString()}`,
-          doc.page.width - 175,
-          yPos + 7
+        yPosition -= 20;
+
+        // Time badge
+        drawBox(margin + 10, yPosition - 5, 60, 20, {
+          fill: COLORS.primary,
+        });
+        const timeText = activity.time;
+        const timeWidth = helveticaBold.widthOfTextAtSize(timeText, 9);
+        drawText(timeText, margin + 10 + (60 - timeWidth) / 2, yPosition, {
+          size: 9,
+          font: helveticaBold,
+          color: COLORS.white,
+        });
+
+        // Activity title
+        drawText(activity.title, margin + 80, yPosition, {
+          size: 11,
+          font: helveticaBold,
+          maxWidth: contentWidth - 90,
+        });
+
+        yPosition -= 20;
+
+        // Location and cost
+        drawText(`📍 ${activity.location}`, margin + 10, yPosition, {
+          size: 9,
+          color: COLORS.textLight,
+          maxWidth: 250,
+        });
+
+        drawText(
+          `${planData.budget.currency} ${activity.cost}`,
+          pageWidth - margin - 80,
+          yPosition,
+          {
+            size: 9,
+            color: COLORS.textLight,
+          }
         );
 
-        yPos += 40;
+        yPosition -= 50;
       });
-    }
 
-    // Budget Summary
-    if (planData.itinerary.budgetBreakdown) {
-      doc.addPage();
-      yPos = drawSectionHeader('💰 Budget Summary', 50);
-
-      const budgetItems = [
-        { label: 'Flights', value: planData.itinerary.budgetBreakdown.flights },
-        {
-          label: 'Accommodation',
-          value: planData.itinerary.budgetBreakdown.accommodation,
-        },
-        { label: 'Food', value: planData.itinerary.budgetBreakdown.food },
-        {
-          label: 'Activities',
-          value: planData.itinerary.budgetBreakdown.activities,
-        },
-        {
-          label: 'Transportation',
-          value: planData.itinerary.budgetBreakdown.transportation,
-        },
-        {
-          label: 'Shopping',
-          value: planData.itinerary.budgetBreakdown.shopping,
-        },
-        {
-          label: 'Emergency Fund',
-          value: planData.itinerary.budgetBreakdown.emergencyFund,
-        },
-      ];
-
-      budgetItems.forEach((item) => {
-        yPos = checkPageBreak(35);
-
-        doc
-          .roundedRect(50, yPos, pageWidth, 30, 5)
-          .fillAndStroke('#ffffff', COLORS.light);
-
-        doc.fontSize(11).fillColor(COLORS.text).font('Helvetica');
-        doc.text(item.label, 70, yPos + 10);
-
-        doc.font('Helvetica-Bold');
-        doc.text(
-          `${planData.budget.currency} ${item.value.toLocaleString()}`,
-          doc.page.width - 200,
-          yPos + 10
+      if (day.activities.length > 5) {
+        yPosition -= 20;
+        drawText(
+          `... and ${day.activities.length - 5} more activities`,
+          margin + 20,
+          yPosition,
+          {
+            size: 10,
+            color: COLORS.textLight,
+          }
         );
+        yPosition -= 10;
+      }
 
-        yPos += 35;
+      // Daily total
+      yPosition -= 30;
+      drawBox(pageWidth - margin - 150, yPosition - 5, 150, 25, {
+        fill: rgb(0.925, 0.992, 0.957),
+        border: COLORS.success,
+        borderWidth: 1,
+      });
+      const totalText = `Daily Total: ${planData.budget.currency} ${day.dailyTotal.toLocaleString()}`;
+      drawText(totalText, pageWidth - margin - 140, yPosition, {
+        size: 11,
+        font: helveticaBold,
+        color: rgb(0.016, 0.463, 0.341),
       });
 
-      // Total
-      yPos = checkPageBreak(100);
-      yPos += 10;
+      yPosition -= 50;
+    });
+  }
 
-      doc
-        .roundedRect(50, yPos, pageWidth, 80, 10)
-        .fillAndStroke(COLORS.primary, COLORS.primary);
+  // Budget Summary
+  if (planData.itinerary.budgetBreakdown) {
+    addNewPage();
 
-      yPos += 20;
-      doc.fontSize(14).fillColor('#ffffff').font('Helvetica-Bold');
-      doc.text('Total Budget', 70, yPos);
-      doc.text(
-        `${planData.budget.currency} ${planData.itinerary.budgetBreakdown.total.toLocaleString()}`,
-        doc.page.width - 250,
-        yPos
-      );
+    drawText('💰 Budget Summary', margin, yPosition, {
+      size: 18,
+      font: helveticaBold,
+      color: COLORS.primary,
+    });
 
-      yPos += 25;
-      doc.fontSize(11);
-      doc.text('Per Person', 70, yPos);
-      doc.text(
-        `${planData.budget.currency} ${planData.itinerary.budgetBreakdown.perPerson.toLocaleString()}`,
-        doc.page.width - 250,
-        yPos
-      );
+    yPosition -= 40;
 
-      yPos += 20;
-      doc.text('Daily Average', 70, yPos);
-      doc.text(
-        `${planData.budget.currency} ${planData.itinerary.budgetBreakdown.dailyAverage.toLocaleString()}`,
-        doc.page.width - 250,
-        yPos
-      );
-    }
+    const budgetItems = [
+      {
+        label: 'Flights',
+        value: planData.itinerary.budgetBreakdown.flights,
+      },
+      {
+        label: 'Accommodation',
+        value: planData.itinerary.budgetBreakdown.accommodation,
+      },
+      { label: 'Food', value: planData.itinerary.budgetBreakdown.food },
+      {
+        label: 'Activities',
+        value: planData.itinerary.budgetBreakdown.activities,
+      },
+      {
+        label: 'Transportation',
+        value: planData.itinerary.budgetBreakdown.transportation,
+      },
+      {
+        label: 'Shopping',
+        value: planData.itinerary.budgetBreakdown.shopping,
+      },
+      {
+        label: 'Emergency Fund',
+        value: planData.itinerary.budgetBreakdown.emergencyFund,
+      },
+    ];
 
-    // Footer on all pages
-    const pageCount = doc.bufferedPageRange().count;
-    for (let i = 0; i < pageCount; i++) {
-      doc.switchToPage(i);
-      doc.fontSize(8).fillColor(COLORS.textLight).font('Helvetica');
-      doc.text(
-        `Generated by TravelPlanner AI - Page ${i + 1} of ${pageCount}`,
-        50,
-        doc.page.height - 30,
-        {
-          align: 'center',
-          width: pageWidth,
-        }
-      );
-    }
+    budgetItems.forEach((item) => {
+      checkPageSpace(40);
 
-    doc.end();
+      drawBox(margin, yPosition - 30, contentWidth, 30, {
+        fill: COLORS.white,
+        border: COLORS.light,
+        borderWidth: 1,
+      });
+
+      yPosition -= 20;
+      drawText(item.label, margin + 20, yPosition, {
+        size: 11,
+      });
+
+      const valueText = `${planData.budget.currency} ${item.value.toLocaleString()}`;
+      const valueWidth = helveticaBold.widthOfTextAtSize(valueText, 11);
+      drawText(valueText, pageWidth - margin - valueWidth - 20, yPosition, {
+        size: 11,
+        font: helveticaBold,
+      });
+
+      yPosition -= 20;
+    });
+
+    yPosition -= 20;
+
+    // Total
+    checkPageSpace(100);
+    drawBox(margin, yPosition - 80, contentWidth, 80, {
+      fill: COLORS.primary,
+    });
+
+    yPosition -= 25;
+    drawText('Total Budget', margin + 20, yPosition, {
+      size: 14,
+      font: helveticaBold,
+      color: COLORS.white,
+    });
+
+    const totalText = `${planData.budget.currency} ${planData.itinerary.budgetBreakdown.total.toLocaleString()}`;
+    const totalWidth = helveticaBold.widthOfTextAtSize(totalText, 14);
+    drawText(totalText, pageWidth - margin - totalWidth - 20, yPosition, {
+      size: 14,
+      font: helveticaBold,
+      color: COLORS.white,
+    });
+
+    yPosition -= 25;
+    drawText('Per Person', margin + 20, yPosition, {
+      size: 11,
+      color: COLORS.white,
+    });
+
+    const perPersonText = `${planData.budget.currency} ${planData.itinerary.budgetBreakdown.perPerson.toLocaleString()}`;
+    const perPersonWidth = helveticaFont.widthOfTextAtSize(perPersonText, 11);
+    drawText(perPersonText, pageWidth - margin - perPersonWidth - 20, yPosition, {
+      size: 11,
+      color: COLORS.white,
+    });
+
+    yPosition -= 20;
+    drawText('Daily Average', margin + 20, yPosition, {
+      size: 11,
+      color: COLORS.white,
+    });
+
+    const dailyText = `${planData.budget.currency} ${planData.itinerary.budgetBreakdown.dailyAverage.toLocaleString()}`;
+    const dailyWidth = helveticaFont.widthOfTextAtSize(dailyText, 11);
+    drawText(dailyText, pageWidth - margin - dailyWidth - 20, yPosition, {
+      size: 11,
+      color: COLORS.white,
+    });
+  }
+
+  // Add footer to all pages
+  const pages = pdfDoc.getPages();
+  pages.forEach((page, index) => {
+    const footerText = `Generated by TravelPlanner AI - Page ${index + 1} of ${pages.length}`;
+    const footerWidth = helveticaFont.widthOfTextAtSize(footerText, 8);
+    page.drawText(footerText, {
+      x: (pageWidth - footerWidth) / 2,
+      y: 20,
+      size: 8,
+      font: helveticaFont,
+      color: COLORS.textLight,
+    });
   });
+
+  const pdfBytes = await pdfDoc.save();
+  return pdfBytes;
 }
