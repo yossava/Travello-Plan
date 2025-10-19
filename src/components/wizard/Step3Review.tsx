@@ -33,57 +33,57 @@ export default function Step3Review({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-white mb-2">
           Review Your Trip Details
         </h2>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-base text-gray-300 mb-6">
           Please review your information before generating your personalized
           itinerary
         </p>
       </div>
 
       {/* Trip Details */}
-      <div className="bg-gray-50 rounded-lg p-4">
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-md font-semibold text-gray-900">Trip Details</h3>
-          <Button variant="secondary" size="sm" onClick={() => onEdit(1)}>
+          <h3 className="text-lg font-semibold text-white">Trip Details</h3>
+          <Button variant="outline" size="sm" onClick={() => onEdit(1)}>
             Edit
           </Button>
         </div>
-        <dl className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
+        <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
           <div>
-            <dt className="text-sm font-medium text-gray-500">Origin</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Origin</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.origin.city}, {formData.origin.country}
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Destination</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Destination</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.destination.city}, {formData.destination.country}
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Departure</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Departure</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formatDate(formData.departureDate)}
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Return</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Return</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formatDate(formData.returnDate)}
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Duration</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Duration</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.duration} days
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Travelers</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Travelers</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {totalTravelers} person{totalTravelers > 1 ? 's' : ''} (
               {formData.travelers.adults} adult{formData.travelers.adults > 1 ? 's' : ''}
               {formData.travelers.children > 0 && `, ${formData.travelers.children} child${formData.travelers.children > 1 ? 'ren' : ''}`}
@@ -92,8 +92,8 @@ export default function Step3Review({
             </dd>
           </div>
           <div className="sm:col-span-2">
-            <dt className="text-sm font-medium text-gray-500">Budget</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Budget</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.budget.currency} {formData.budget.min.toLocaleString()}{' '}
               - {formData.budget.max.toLocaleString()}
             </dd>
@@ -102,68 +102,68 @@ export default function Step3Review({
       </div>
 
       {/* Preferences */}
-      <div className="bg-gray-50 rounded-lg p-4">
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
         <div className="flex justify-between items-start mb-4">
-          <h3 className="text-md font-semibold text-gray-900">Preferences</h3>
-          <Button variant="secondary" size="sm" onClick={() => onEdit(2)}>
+          <h3 className="text-lg font-semibold text-white">Preferences</h3>
+          <Button variant="outline" size="sm" onClick={() => onEdit(2)}>
             Edit
           </Button>
         </div>
-        <dl className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2">
+        <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
           <div>
-            <dt className="text-sm font-medium text-gray-500">Trip Purpose</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Trip Purpose</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.preferences.tripPurpose}
             </dd>
           </div>
           <div>
-            <dt className="text-sm font-medium text-gray-500">Travel Pace</dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dt className="text-sm font-medium text-gray-400">Travel Pace</dt>
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.preferences.travelPace}
             </dd>
           </div>
           <div className="sm:col-span-2">
-            <dt className="text-sm font-medium text-gray-500">
+            <dt className="text-sm font-medium text-gray-400">
               Accommodation Types
             </dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.preferences.accommodationTypes.join(', ')}
             </dd>
           </div>
           <div className="sm:col-span-2">
-            <dt className="text-sm font-medium text-gray-500">
+            <dt className="text-sm font-medium text-gray-400">
               Interests & Activities
             </dt>
-            <dd className="mt-1 text-sm text-gray-900">
+            <dd className="mt-1 text-sm text-white font-medium">
               {formData.preferences.interests.join(', ')}
             </dd>
           </div>
           {formData.preferences.dietaryRestrictions.length > 0 && (
             <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">
+              <dt className="text-sm font-medium text-gray-400">
                 Dietary Restrictions
               </dt>
-              <dd className="mt-1 text-sm text-gray-900">
+              <dd className="mt-1 text-sm text-white font-medium">
                 {formData.preferences.dietaryRestrictions.join(', ')}
               </dd>
             </div>
           )}
           {formData.preferences.mustVisitPlaces && (
             <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">
+              <dt className="text-sm font-medium text-gray-400">
                 Must-Visit Places
               </dt>
-              <dd className="mt-1 text-sm text-gray-900">
+              <dd className="mt-1 text-sm text-white font-medium">
                 {formData.preferences.mustVisitPlaces}
               </dd>
             </div>
           )}
           {formData.preferences.specialRequirements && (
             <div className="sm:col-span-2">
-              <dt className="text-sm font-medium text-gray-500">
+              <dt className="text-sm font-medium text-gray-400">
                 Special Requirements
               </dt>
-              <dd className="mt-1 text-sm text-gray-900">
+              <dd className="mt-1 text-sm text-white font-medium">
                 {formData.preferences.specialRequirements}
               </dd>
             </div>
@@ -172,11 +172,11 @@ export default function Step3Review({
       </div>
 
       {/* Actions */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4">
         <div className="flex">
           <div className="flex-shrink-0">
             <svg
-              className="h-5 w-5 text-blue-400"
+              className="h-5 w-5 text-purple-400"
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -188,7 +188,7 @@ export default function Step3Review({
             </svg>
           </div>
           <div className="ml-3 flex-1">
-            <p className="text-sm text-blue-700">
+            <p className="text-sm text-purple-200">
               Generating your personalized itinerary typically takes 20-30
               seconds. You can save this as a draft and come back later, or
               generate it now!
@@ -199,7 +199,7 @@ export default function Step3Review({
 
       <div className="flex space-x-4">
         <Button
-          variant="secondary"
+          variant="outline"
           onClick={onSaveDraft}
           disabled={generating}
           className="flex-1"
@@ -207,6 +207,7 @@ export default function Step3Review({
           Save as Draft
         </Button>
         <Button
+          variant="gradient"
           onClick={onGenerate}
           disabled={generating}
           className="flex-1"

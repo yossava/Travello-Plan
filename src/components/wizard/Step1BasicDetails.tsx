@@ -33,19 +33,19 @@ export default function Step1BasicDetails({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-white mb-2">
           Basic Trip Details
         </h2>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-base text-gray-300">
           Tell us about your travel plans
         </p>
       </div>
 
       {/* Origin */}
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Origin</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Origin</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             id="originCountry"
@@ -75,7 +75,7 @@ export default function Step1BasicDetails({
 
       {/* Destination */}
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Destination</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Destination</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <Input
             id="destCountry"
@@ -108,7 +108,7 @@ export default function Step1BasicDetails({
 
       {/* Dates */}
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">
+        <h3 className="text-lg font-semibold text-white mb-4">
           Travel Dates
         </h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -134,15 +134,22 @@ export default function Step1BasicDetails({
           />
         </div>
         {calculateDuration() > 0 && (
-          <p className="mt-2 text-sm text-gray-600">
-            Duration: {calculateDuration()} days
-          </p>
+          <div className="mt-3 flex items-center">
+            <div className="inline-flex items-center px-4 py-2 bg-purple-500/20 border border-purple-500/30 rounded-xl">
+              <svg className="w-5 h-5 text-purple-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span className="text-sm font-semibold text-purple-300">
+                Duration: {calculateDuration()} days
+              </span>
+            </div>
+          </div>
         )}
       </div>
 
       {/* Travelers */}
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Travelers</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Travelers</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Input
             id="adults"
@@ -193,7 +200,7 @@ export default function Step1BasicDetails({
 
       {/* Budget */}
       <div>
-        <h3 className="text-sm font-medium text-gray-700 mb-3">Budget</h3>
+        <h3 className="text-lg font-semibold text-white mb-4">Budget</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Select
             id="currency"

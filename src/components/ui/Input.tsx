@@ -24,41 +24,42 @@ export default function Input({
       {label && (
         <label
           htmlFor={props.id}
-          className="block text-sm font-semibold text-gray-700 mb-2"
+          className="block text-sm font-semibold text-white mb-2"
         >
           {label}
         </label>
       )}
       <div className="relative">
         {leftIcon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-purple-400">
             {leftIcon}
           </div>
         )}
         <input
           className={`
             block w-full rounded-xl border-2 px-4 py-3
+            bg-white/5 backdrop-blur-sm text-white placeholder-gray-400
             ${leftIcon ? 'pl-10' : ''}
             ${rightIcon ? 'pr-10' : ''}
             ${
               error
-                ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                : 'border-gray-200 focus:ring-4 focus:ring-primary-500/20 focus:border-primary-500'
+                ? 'border-red-400 focus:ring-red-500/50 focus:border-red-500'
+                : 'border-white/20 focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500'
             }
-            transition-all duration-200 shadow-sm hover:border-gray-300
-            disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-gray-50
+            transition-all duration-200 shadow-sm hover:border-white/30
+            disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-white/5
             ${className}
           `}
           {...props}
         />
         {rightIcon && (
-          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-gray-400">
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-purple-400">
             {rightIcon}
           </div>
         )}
       </div>
       {error && (
-        <p className="mt-2 text-sm text-red-600 flex items-center">
+        <p className="mt-2 text-sm text-red-400 flex items-center">
           <svg
             className="w-4 h-4 mr-1"
             fill="currentColor"
@@ -74,7 +75,7 @@ export default function Input({
         </p>
       )}
       {helperText && !error && (
-        <p className="mt-2 text-sm text-gray-500">{helperText}</p>
+        <p className="mt-2 text-sm text-gray-400">{helperText}</p>
       )}
     </div>
   );

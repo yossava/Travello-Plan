@@ -48,10 +48,10 @@ export default function Step2Preferences({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-4">
+        <h2 className="text-2xl font-bold text-white mb-2">
           Travel Preferences
         </h2>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-base text-gray-300 mb-6">
           Help us personalize your itinerary
         </p>
       </div>
@@ -79,10 +79,10 @@ export default function Step2Preferences({
 
       {/* Accommodation Preferences */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Accommodation Preferences <span className="text-red-600">*</span>
+        <label className="block text-sm font-semibold text-white mb-2">
+          Accommodation Preferences <span className="text-red-400">*</span>
         </label>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-gray-400 mb-3">
           Select at least one accommodation type
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -97,7 +97,10 @@ export default function Step2Preferences({
           ))}
         </div>
         {errors.accommodationTypes && (
-          <p className="mt-1 text-sm text-red-600">
+          <p className="mt-2 text-sm text-red-400 flex items-center">
+            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
             {errors.accommodationTypes}
           </p>
         )}
@@ -105,10 +108,10 @@ export default function Step2Preferences({
 
       {/* Interests */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Interests & Activities <span className="text-red-600">*</span>
+        <label className="block text-sm font-semibold text-white mb-2">
+          Interests & Activities <span className="text-red-400">*</span>
         </label>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-gray-400 mb-3">
           Select at least one interest
         </p>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -123,14 +126,19 @@ export default function Step2Preferences({
           ))}
         </div>
         {errors.interests && (
-          <p className="mt-1 text-sm text-red-600">{errors.interests}</p>
+          <p className="mt-2 text-sm text-red-400 flex items-center">
+            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            {errors.interests}
+          </p>
         )}
       </div>
 
       {/* Travel Pace */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Travel Pace <span className="text-red-600">*</span>
+        <label className="block text-sm font-semibold text-white mb-2">
+          Travel Pace <span className="text-red-400">*</span>
         </label>
         <div className="space-y-2">
           {TRAVEL_PACE.map((pace) => (
@@ -147,11 +155,11 @@ export default function Step2Preferences({
                     travelPace: e.target.value,
                   })
                 }
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300"
+                className="h-4 w-4 text-purple-500 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-slate-800 border-white/20 bg-white/5"
               />
               <label
                 htmlFor={`pace-${pace}`}
-                className="ml-2 block text-sm text-gray-900"
+                className="ml-2 block text-sm text-white"
               >
                 {pace}
               </label>
@@ -159,13 +167,18 @@ export default function Step2Preferences({
           ))}
         </div>
         {errors.travelPace && (
-          <p className="mt-1 text-sm text-red-600">{errors.travelPace}</p>
+          <p className="mt-2 text-sm text-red-400 flex items-center">
+            <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+            {errors.travelPace}
+          </p>
         )}
       </div>
 
       {/* Dietary Restrictions */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="block text-sm font-semibold text-white mb-2">
           Dietary Restrictions
         </label>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
