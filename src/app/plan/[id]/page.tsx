@@ -422,7 +422,9 @@ export default function PlanDetailPage() {
                   This plan hasn&apos;t been generated yet. Continue to the wizard to complete and generate your itinerary.
                 </p>
                 <div className="mt-4">
-                  <Button variant="gradient" size="sm">Continue Planning</Button>
+                  <Link href="/plan/new">
+                    <Button variant="gradient" size="sm">Continue Planning</Button>
+                  </Link>
                 </div>
               </div>
             </div>
