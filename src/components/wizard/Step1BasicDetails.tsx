@@ -1,6 +1,6 @@
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
-import { CURRENCIES } from '@/types/plan';
+import { CURRENCIES, COUNTRIES } from '@/types/plan';
 
 interface Step1Props {
   formData: {
@@ -47,7 +47,7 @@ export default function Step1BasicDetails({
       <div>
         <h3 className="text-lg font-semibold text-white mb-4">Origin</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
+          <Select
             id="originCountry"
             label="Country"
             value={formData.origin.country}
@@ -57,6 +57,10 @@ export default function Step1BasicDetails({
                 country: e.target.value,
               })
             }
+            options={COUNTRIES.map((country) => ({
+              value: country,
+              label: country,
+            }))}
             error={errors.originCountry}
             required
           />
@@ -77,7 +81,7 @@ export default function Step1BasicDetails({
       <div>
         <h3 className="text-lg font-semibold text-white mb-4">Destination</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
+          <Select
             id="destCountry"
             label="Country"
             value={formData.destination.country}
@@ -87,6 +91,10 @@ export default function Step1BasicDetails({
                 country: e.target.value,
               })
             }
+            options={COUNTRIES.map((country) => ({
+              value: country,
+              label: country,
+            }))}
             error={errors.destCountry}
             required
           />
