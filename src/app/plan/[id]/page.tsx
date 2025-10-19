@@ -272,7 +272,8 @@ export default function PlanDetailPage() {
       const response = await fetch(`/api/plans/${params.id}/export-pdf`);
 
       if (!response.ok) {
-        throw new Error('Failed to generate PDF');
+        const errorData = await response.json().catch(() => ({ error: 'Failed to generate PDF' }));
+        throw new Error(errorData.error || errorData.details || 'Failed to generate PDF');
       }
 
       // Get the PDF blob
@@ -293,7 +294,8 @@ export default function PlanDetailPage() {
       toast.success('PDF downloaded successfully!', { id: loadingToast });
     } catch (error) {
       console.error('PDF generation error:', error); // eslint-disable-line no-console
-      toast.error('Failed to generate PDF', { id: loadingToast });
+      const err = error as Error;
+      toast.error(err.message || 'Failed to generate PDF', { id: loadingToast });
     }
   };
 

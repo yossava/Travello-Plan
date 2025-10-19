@@ -38,9 +38,17 @@ export async function GET(
       );
     }
 
-    if (plan.status !== 'completed' || !plan.itinerary) {
+    // Check if itinerary exists (allow both 'generated' and 'completed' status)
+    if (!plan.itinerary) {
       return NextResponse.json(
-        { error: 'Travel plan is not completed yet' },
+        { error: 'No itinerary available. Please generate an itinerary first.' },
+        { status: 400 }
+      );
+    }
+
+    if (plan.status === 'draft' || plan.status === 'pending') {
+      return NextResponse.json(
+        { error: 'Travel plan is still in progress. Please wait for itinerary generation to complete.' },
         { status: 400 }
       );
     }
@@ -81,9 +89,11 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error('PDF generation error:', error); // eslint-disable-line no-console
+    const err = error as Error;
+    console.error('PDF generation error:', err); // eslint-disable-line no-console
+    console.error('Error stack:', err.stack); // eslint-disable-line no-console
     return NextResponse.json(
-      { error: 'Failed to generate PDF' },
+      { error: 'Failed to generate PDF', details: err.message },
       { status: 500 }
     );
   }
