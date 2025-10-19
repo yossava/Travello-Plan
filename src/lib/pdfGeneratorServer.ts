@@ -182,6 +182,7 @@ export async function generateBeautifulPDF(
       fill?: typeof COLORS.light;
       border?: typeof COLORS.primary;
       borderWidth?: number;
+      borderRadius?: number;
     } = {}
   ) => {
     const { fill, border, borderWidth = 1 } = options;
@@ -208,8 +209,136 @@ export async function generateBeautifulPDF(
     }
   };
 
-  // Title Page
+  const drawCircle = (
+    x: number,
+    y: number,
+    radius: number,
+    options: {
+      fill?: typeof COLORS.primary;
+      border?: typeof COLORS.primary;
+      borderWidth?: number;
+    } = {}
+  ) => {
+    const { fill, border, borderWidth = 1 } = options;
+
+    if (fill) {
+      currentPage.drawCircle({
+        x,
+        y,
+        size: radius,
+        color: fill,
+      });
+    }
+
+    if (border) {
+      currentPage.drawCircle({
+        x,
+        y,
+        size: radius,
+        borderColor: border,
+        borderWidth,
+      });
+    }
+  };
+
+  const drawIcon = (
+    type: 'plane' | 'hotel' | 'calendar' | 'money' | 'alert' | 'location',
+    x: number,
+    y: number,
+    size: number,
+    color: typeof COLORS.primary
+  ) => {
+    switch (type) {
+      case 'plane':
+        // Draw a simple plane icon using lines
+        currentPage.drawLine({
+          start: { x: x - size, y },
+          end: { x: x + size, y },
+          thickness: 2,
+          color,
+        });
+        currentPage.drawLine({
+          start: { x, y: y - size / 2 },
+          end: { x, y: y + size / 2 },
+          thickness: 2,
+          color,
+        });
+        break;
+      case 'hotel':
+        // Draw a simple house/building
+        currentPage.drawRectangle({
+          x: x - size / 2,
+          y: y - size / 2,
+          width: size,
+          height: size,
+          borderColor: color,
+          borderWidth: 2,
+        });
+        break;
+      case 'calendar':
+        // Draw a calendar icon
+        currentPage.drawRectangle({
+          x: x - size / 2,
+          y: y - size / 2,
+          width: size,
+          height: size,
+          borderColor: color,
+          borderWidth: 2,
+        });
+        currentPage.drawLine({
+          start: { x: x - size / 2, y: y + size / 4 },
+          end: { x: x + size / 2, y: y + size / 4 },
+          thickness: 2,
+          color,
+        });
+        break;
+      case 'money':
+        // Draw a dollar sign using circle
+        drawCircle(x, y, size / 2, { border: color, borderWidth: 2 });
+        break;
+      case 'alert':
+        // Draw an exclamation mark triangle
+        currentPage.drawLine({
+          start: { x: x - size, y: y - size },
+          end: { x, y: y + size },
+          thickness: 2,
+          color,
+        });
+        currentPage.drawLine({
+          start: { x, y: y + size },
+          end: { x: x + size, y: y - size },
+          thickness: 2,
+          color,
+        });
+        currentPage.drawLine({
+          start: { x: x + size, y: y - size },
+          end: { x: x - size, y: y - size },
+          thickness: 2,
+          color,
+        });
+        break;
+      case 'location':
+        // Draw a location pin
+        drawCircle(x, y + size / 4, size / 3, { fill: color });
+        currentPage.drawLine({
+          start: { x, y: y + size / 4 },
+          end: { x, y: y - size },
+          thickness: 2,
+          color,
+        });
+        break;
+    }
+  };
+
+  // Title Page with decorative elements
   drawBox(0, pageHeight - 120, pageWidth, 120, { fill: COLORS.primary });
+
+  // Add decorative accent bar
+  drawBox(0, pageHeight - 125, pageWidth, 5, { fill: COLORS.accent });
+
+  // Add decorative circles
+  drawCircle(50, pageHeight - 60, 15, { fill: COLORS.accent });
+  drawCircle(pageWidth - 50, pageHeight - 60, 15, { fill: COLORS.secondary });
 
   drawText(planData.planName, pageWidth / 2, pageHeight - 60, {
     size: 24,
@@ -237,7 +366,8 @@ export async function generateBeautifulPDF(
   });
 
   yPosition -= 30;
-  drawText('Trip Overview', margin + 20, yPosition, {
+  drawIcon('plane', margin + 30, yPosition + 5, 8, COLORS.primary);
+  drawText('Trip Overview', margin + 50, yPosition, {
     size: 16,
     font: helveticaBold,
     color: COLORS.primary,
@@ -303,7 +433,8 @@ export async function generateBeautifulPDF(
     });
 
     yPosition -= 30;
-    drawText('EMERGENCY CONTACTS', margin + 20, yPosition, {
+    drawIcon('alert', margin + 30, yPosition + 5, 6, COLORS.danger);
+    drawText('EMERGENCY CONTACTS', margin + 50, yPosition, {
       size: 14,
       font: helveticaBold,
       color: COLORS.danger,
@@ -330,7 +461,8 @@ export async function generateBeautifulPDF(
   if (planData.itinerary.flights) {
     addNewPage();
 
-    drawText('Flight Information', margin, yPosition, {
+    drawIcon('plane', margin + 10, yPosition + 6, 10, COLORS.primary);
+    drawText('Flight Information', margin + 35, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
@@ -407,7 +539,8 @@ export async function generateBeautifulPDF(
   if (planData.itinerary.accommodation) {
     checkPageSpace(200);
 
-    drawText('Accommodation', margin, yPosition, {
+    drawIcon('hotel', margin + 10, yPosition + 6, 10, COLORS.primary);
+    drawText('Accommodation', margin + 35, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
@@ -459,7 +592,8 @@ export async function generateBeautifulPDF(
   ) {
     addNewPage();
 
-    drawText('Daily Itinerary', margin, yPosition, {
+    drawIcon('calendar', margin + 10, yPosition + 6, 10, COLORS.primary);
+    drawText('Daily Itinerary', margin + 35, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
@@ -534,10 +668,11 @@ export async function generateBeautifulPDF(
         yPosition -= 20;
 
         // Location and cost
-        drawText(`Location: ${activity.location}`, margin + 10, yPosition, {
+        drawIcon('location', margin + 15, yPosition + 3, 4, COLORS.textLight);
+        drawText(activity.location, margin + 25, yPosition, {
           size: 9,
           color: COLORS.textLight,
-          maxWidth: 250,
+          maxWidth: 240,
         });
 
         drawText(
@@ -589,7 +724,8 @@ export async function generateBeautifulPDF(
   if (planData.itinerary.budgetBreakdown) {
     addNewPage();
 
-    drawText('Budget Summary', margin, yPosition, {
+    drawIcon('money', margin + 10, yPosition + 6, 10, COLORS.primary);
+    drawText('Budget Summary', margin + 35, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
