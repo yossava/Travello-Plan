@@ -353,7 +353,8 @@ Please create a detailed itinerary in the following JSON structure:
         }
       ],
       "dailyTotal": number
-    }
+    },
+    // ... MUST include entries for ALL ${planData.duration} days
   ],
   "budgetBreakdown": {
     "flights": number,
@@ -383,16 +384,20 @@ Please create a detailed itinerary in the following JSON structure:
 }
 
 Important guidelines:
-1. Use REAL hotel names, restaurant names, and attractions that actually exist in ${planData.destination.city}
-2. Provide REALISTIC pricing in ${planData.budget.currency}
-3. Create a detailed hour-by-hour schedule for each day
-4. Ensure the total budget stays within ${planData.budget.currency} ${planData.budget.min.toLocaleString()} - ${planData.budget.max.toLocaleString()}
-5. Consider the travel pace (${planData.preferences.travelPace}) when scheduling activities
-6. Include practical tips and local insights
-7. Account for travel time between locations
-8. Include opening hours for attractions
-9. Suggest specific restaurants based on dietary restrictions and preferences
-10. Make the itinerary feasible and enjoyable for the specified group
+1. CRITICAL: Create itineraries for ALL ${planData.duration} days (Day 1, Day 2, Day 3... up to Day ${planData.duration})
+2. Use REAL hotel names, restaurant names, and attractions that actually exist in ${planData.destination.city}
+3. Provide REALISTIC pricing in ${planData.budget.currency}
+4. Create a detailed hour-by-hour schedule for each day (6-8 activities per day)
+5. Ensure the total budget stays within ${planData.budget.currency} ${planData.budget.min.toLocaleString()} - ${planData.budget.max.toLocaleString()}
+6. Consider the travel pace (${planData.preferences.travelPace}) when scheduling activities
+7. Include practical tips and local insights
+8. Account for travel time between locations
+9. Include opening hours for attractions
+10. Suggest specific restaurants based on dietary restrictions and preferences
+11. Make the itinerary feasible and enjoyable for the specified group
+12. Each day should have a different theme and variety of activities
+
+CRITICAL: The dailyItinerary array MUST contain ${planData.duration} day objects, one for each day of the trip.
 
 Return ONLY the JSON object, no additional text.`;
 }

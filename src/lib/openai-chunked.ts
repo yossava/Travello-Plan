@@ -202,7 +202,19 @@ async function generateDailyItinerary(
   planData: TravelPlanInput,
   planId?: string
 ) {
-  const prompt = `Generate ONLY the daily itinerary for ${planData.duration} days in ${planData.destination.city}, ${planData.destination.country}.
+  // Calculate actual dates for the trip
+  const startDate = new Date(planData.departureDate);
+  const dates = [];
+  for (let i = 0; i < planData.duration; i++) {
+    const date = new Date(startDate);
+    date.setDate(date.getDate() + i);
+    dates.push(date.toISOString().split('T')[0]);
+  }
+
+  const prompt = `Generate a complete daily itinerary for ALL ${planData.duration} days in ${planData.destination.city}, ${planData.destination.country}.
+
+IMPORTANT: You MUST create itineraries for EACH of these ${planData.duration} days:
+${dates.map((date, i) => `Day ${i + 1}: ${date}`).join('\n')}
 
 Trip details:
 - Purpose: ${planData.preferences.tripPurpose}
@@ -211,35 +223,49 @@ Trip details:
 - Dietary restrictions: ${planData.preferences.dietaryRestrictions.join(', ') || 'None'}
 ${planData.preferences.mustVisitPlaces ? `- Must visit: ${planData.preferences.mustVisitPlaces}` : ''}
 
-Create a detailed day-by-day itinerary. Return ONLY this JSON structure:
+Create a detailed hour-by-hour itinerary for EACH day. Return an array with ${planData.duration} day objects:
 [
   {
     "day": 1,
-    "date": "YYYY-MM-DD",
-    "theme": "string",
-    "weather": "string",
+    "date": "${dates[0]}",
+    "theme": "Arrival & City Introduction",
+    "weather": "Expected weather",
     "activities": [
       {
-        "time": "HH:MM",
-        "type": "breakfast|attraction|lunch|activity|dinner|etc",
-        "title": "string",
-        "description": "string",
-        "location": "string",
-        "address": "string",
-        "duration": "string",
-        "cost": number,
-        "openingHours": "string",
-        "travelTimeToNext": "string",
-        "notes": "string"
-      }
+        "time": "09:00",
+        "type": "breakfast",
+        "title": "Breakfast at [Real Restaurant Name]",
+        "description": "Start your day with local cuisine",
+        "location": "[Restaurant Name]",
+        "address": "[Real Address]",
+        "duration": "1h",
+        "cost": [realistic number],
+        "openingHours": "07:00 - 22:00",
+        "travelTimeToNext": "15m",
+        "notes": "Try the local specialty"
+      },
+      // ... more activities for Day 1 (breakfast, morning activities, lunch, afternoon, dinner, evening)
     ],
-    "dailyTotal": number
+    "dailyTotal": [sum of all activity costs]
+  },
+  {
+    "day": 2,
+    "date": "${dates[1] || 'YYYY-MM-DD'}",
+    "theme": "Different theme for Day 2",
+    "weather": "Expected weather",
+    "activities": [
+      // ... complete activities for Day 2
+    ],
+    "dailyTotal": [number]
   }
-]`;
+  // ... continue for ALL ${planData.duration} days
+]
+
+CRITICAL: Generate itineraries for ALL ${planData.duration} days. Each day should have 6-8 activities covering breakfast, morning attractions, lunch, afternoon activities, dinner, and evening plans. Use real venue names and addresses in ${planData.destination.city}.`;
 
   const result = await callOpenAIWithRetry(
     prompt,
-    'Generate realistic daily itinerary with real venues and accurate timings.',
+    `You MUST generate itineraries for ALL ${planData.duration} days. Create realistic daily plans with real venues in ${planData.destination.city}. Each day should have a different theme and mix of activities based on the user's interests: ${planData.preferences.interests.join(', ')}.`,
     planId,
     3
   );
