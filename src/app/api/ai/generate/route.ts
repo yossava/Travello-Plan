@@ -3,8 +3,9 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { generateItinerary } from '@/lib/openai';
+import { generateItineraryChunked } from '@/lib/openai-chunked';
 
-export const maxDuration = 60; // 60 seconds timeout for API route
+export const maxDuration = 120; // 120 seconds timeout for API route (chunked generation may take longer)
 
 export async function POST(request: NextRequest) {
   try {
@@ -53,8 +54,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate itinerary
-    const itinerary = await generateItinerary({
+    // Prepare plan data
+    const planInput = {
       origin: plan.origin as { country: string; city: string },
       destination: plan.destination as { country: string; city: string },
       departureDate: plan.departureDate,
@@ -75,7 +76,54 @@ export async function POST(request: NextRequest) {
         mustVisitPlaces?: string;
         specialRequirements?: string;
       },
-    }, planId);
+    };
+
+    let itinerary;
+    let generationStrategy = 'single';
+
+    // Strategy 1: Try single-call generation first (faster if it works)
+    try {
+      // eslint-disable-next-line no-console
+      console.log('Attempting single-call generation...');
+      itinerary = await generateItinerary(planInput, planId);
+      generationStrategy = 'single';
+    } catch (singleError) {
+      // eslint-disable-next-line no-console
+      console.error('Single-call generation failed:', singleError);
+
+      // Strategy 2: Fallback to chunked generation (more reliable)
+      try {
+        // eslint-disable-next-line no-console
+        console.log('Falling back to chunked generation...');
+        itinerary = await generateItineraryChunked(planInput, planId);
+        generationStrategy = 'chunked';
+      } catch (chunkedError) {
+        // eslint-disable-next-line no-console
+        console.error('Chunked generation also failed:', chunkedError);
+
+        // Log the failure
+        await prisma.openAILog.create({
+          data: {
+            planId,
+            model: 'fallback-failed',
+            prompt: 'Both single and chunked generation failed',
+            systemMessage: 'Fallback strategy exhausted',
+            temperature: 0,
+            maxTokens: 0,
+            status: 'error',
+            errorMessage: `Single: ${(singleError as Error).message}, Chunked: ${(chunkedError as Error).message}`,
+            wasRepaired: false,
+          },
+        });
+
+        throw new Error(
+          'Failed to generate itinerary using both single and chunked strategies. Please try again.'
+        );
+      }
+    }
+
+    // eslint-disable-next-line no-console
+    console.log(`Itinerary generated successfully using ${generationStrategy} strategy`);
 
     // Update plan with generated itinerary
     const updatedPlan = await prisma.travelPlan.update({

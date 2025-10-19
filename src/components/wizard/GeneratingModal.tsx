@@ -8,12 +8,15 @@ interface GeneratingModalProps {
 }
 
 const PROGRESS_MESSAGES = [
-  'Analyzing your preferences...',
-  'Finding the best flight routes...',
-  'Selecting perfect accommodations...',
-  'Creating your personalized itinerary...',
+  'Analyzing your travel preferences...',
+  'Searching for the best flight options...',
+  'Finding perfect accommodations...',
+  'Planning your daily activities...',
+  'Optimizing your itinerary...',
   'Calculating budget breakdown...',
-  'Almost done...',
+  'Gathering essential travel information...',
+  'Finalizing your personalized plan...',
+  'Almost ready...',
 ];
 
 export default function GeneratingModal({ isOpen }: GeneratingModalProps) {
@@ -102,7 +105,10 @@ export default function GeneratingModal({ isOpen }: GeneratingModalProps) {
               </div>
 
               <p className="mt-6 text-sm text-gray-400">
-                This may take 20-30 seconds...
+                This may take 30-60 seconds. We&apos;re creating a detailed, personalized itinerary just for you...
+              </p>
+              <p className="mt-2 text-xs text-gray-500">
+                Using AI to generate flights, accommodations, daily activities, and travel tips
               </p>
             </div>
           </div>
