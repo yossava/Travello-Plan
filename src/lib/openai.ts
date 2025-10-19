@@ -1,4 +1,6 @@
 import OpenAI from 'openai';
+import { prisma } from './prisma';
+import { Prisma } from '@prisma/client';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -23,33 +25,220 @@ interface TravelPlanInput {
   };
 }
 
-export async function generateItinerary(planData: TravelPlanInput) {
+export async function generateItinerary(planData: TravelPlanInput, planId?: string): Promise<Prisma.JsonValue> {
+  const startTime = Date.now();
   const prompt = constructPrompt(planData);
+  const systemMessage = 'You are an expert travel planner with deep knowledge of destinations worldwide. Create detailed, personalized travel itineraries with realistic recommendations, pricing, and schedules.';
+  const model = 'gpt-4o';
+  const temperature = 0.7;
+  const maxTokens = 6000;
 
-  const completion = await openai.chat.completions.create({
-    model: 'gpt-4o',
-    messages: [
-      {
-        role: 'system',
-        content:
-          'You are an expert travel planner with deep knowledge of destinations worldwide. Create detailed, personalized travel itineraries with realistic recommendations, pricing, and schedules.',
-      },
-      {
-        role: 'user',
-        content: prompt,
-      },
-    ],
-    temperature: 0.7,
-    max_tokens: 6000,
-    response_format: { type: 'json_object' },
-  });
+  let logId: string | undefined;
+  let completion: OpenAI.Chat.Completions.ChatCompletion;
+  let response: string | null = null;
+  let parsedResponse: Prisma.JsonValue;
+  let wasRepaired = false;
+  let parseError: string | undefined;
 
-  const response = completion.choices[0].message.content;
-  if (!response) {
-    throw new Error('No response from OpenAI');
+  try {
+    // Call OpenAI API
+    completion = await openai.chat.completions.create({
+      model,
+      messages: [
+        {
+          role: 'system',
+          content: systemMessage,
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature,
+      max_tokens: maxTokens,
+      response_format: { type: 'json_object' },
+    });
+
+    response = completion.choices[0].message.content;
+    if (!response) {
+      throw new Error('No response from OpenAI');
+    }
+
+    const durationMs = Date.now() - startTime;
+
+    // Try to parse the response
+    try {
+      parsedResponse = JSON.parse(response);
+
+      // Log successful request
+      const log = await prisma.openAILog.create({
+        data: {
+          planId,
+          model,
+          prompt,
+          systemMessage,
+          temperature,
+          maxTokens,
+          response,
+          completionTokens: completion.usage?.completion_tokens,
+          promptTokens: completion.usage?.prompt_tokens,
+          totalTokens: completion.usage?.total_tokens,
+          status: 'success',
+          wasRepaired: false,
+          durationMs,
+        },
+      });
+      logId = log.id;
+
+      return parsedResponse;
+    } catch (jsonError) {
+      // JSON parsing failed - try to repair
+      const error = jsonError as Error;
+      parseError = error.message;
+      // eslint-disable-next-line no-console
+      console.error('JSON parse error:', error.message);
+      // eslint-disable-next-line no-console
+      console.error('Response preview:', response.substring(0, 500));
+
+      // Attempt to repair the JSON
+      const repairedResponse = repairJSON(response);
+
+      try {
+        parsedResponse = JSON.parse(repairedResponse);
+        wasRepaired = true;
+
+        // Log repaired successful request
+        const log = await prisma.openAILog.create({
+          data: {
+            planId,
+            model,
+            prompt,
+            systemMessage,
+            temperature,
+            maxTokens,
+            response: repairedResponse,
+            completionTokens: completion.usage?.completion_tokens,
+            promptTokens: completion.usage?.prompt_tokens,
+            totalTokens: completion.usage?.total_tokens,
+            status: 'success',
+            parseError,
+            wasRepaired: true,
+            durationMs: Date.now() - startTime,
+          },
+        });
+        logId = log.id;
+
+        // eslint-disable-next-line no-console
+        console.log('JSON repaired successfully');
+        return parsedResponse;
+      } catch (repairError) {
+        // Still failed after repair - log and throw
+        const repairErr = repairError as Error;
+        const log = await prisma.openAILog.create({
+          data: {
+            planId,
+            model,
+            prompt,
+            systemMessage,
+            temperature,
+            maxTokens,
+            response,
+            completionTokens: completion.usage?.completion_tokens,
+            promptTokens: completion.usage?.prompt_tokens,
+            totalTokens: completion.usage?.total_tokens,
+            status: 'error',
+            parseError: `Original: ${error.message}, Repair failed: ${repairErr.message}`,
+            wasRepaired: false,
+            durationMs: Date.now() - startTime,
+          },
+        });
+        logId = log.id;
+
+        throw new Error(`Failed to parse OpenAI response even after repair. Log ID: ${logId}. Error: ${error.message}`);
+      }
+    }
+  } catch (error) {
+    // API call failed or other error
+    const err = error as Error;
+    const durationMs = Date.now() - startTime;
+
+    await prisma.openAILog.create({
+      data: {
+        planId,
+        model,
+        prompt,
+        systemMessage,
+        temperature,
+        maxTokens,
+        response: response || null,
+        status: 'error',
+        errorMessage: err.message,
+        parseError,
+        wasRepaired,
+        durationMs,
+      },
+    });
+
+    throw error;
+  }
+}
+
+/**
+ * Attempts to repair malformed JSON by fixing common issues
+ */
+function repairJSON(jsonString: string): string {
+  let repaired = jsonString;
+
+  // Remove any leading/trailing whitespace
+  repaired = repaired.trim();
+
+  // Remove markdown code blocks if present
+  repaired = repaired.replace(/^```json\s*/i, '').replace(/\s*```$/, '');
+
+  // Fix trailing commas in objects and arrays
+  repaired = repaired.replace(/,(\s*[}\]])/g, '$1');
+
+  // Fix missing commas between array/object elements
+  repaired = repaired.replace(/}(\s*){/g, '},\n{');
+  repaired = repaired.replace(/](\s*)\[/g, '],\n[');
+
+  // Fix unescaped quotes in strings (basic attempt)
+  // This is tricky and may not catch all cases
+
+  // Try to fix truncated JSON by closing open braces/brackets
+  const openBraces = (repaired.match(/{/g) || []).length;
+  const closeBraces = (repaired.match(/}/g) || []).length;
+  const openBrackets = (repaired.match(/\[/g) || []).length;
+  const closeBrackets = (repaired.match(/]/g) || []).length;
+
+  // Add missing closing braces
+  for (let i = 0; i < openBraces - closeBraces; i++) {
+    repaired += '\n}';
   }
 
-  return JSON.parse(response);
+  // Add missing closing brackets
+  for (let i = 0; i < openBrackets - closeBrackets; i++) {
+    repaired += '\n]';
+  }
+
+  // Remove incomplete key-value pairs at the end
+  // Look for patterns like: "key": "value (incomplete)
+  repaired = repaired.replace(/,?\s*"[^"]*":\s*"[^"]*$/g, '');
+  repaired = repaired.replace(/,?\s*"[^"]*":\s*[^,}\]]*$/g, '');
+
+  // Ensure the string ends properly
+  if (!repaired.endsWith('}') && !repaired.endsWith(']')) {
+    // Find the last valid closing character
+    const lastBrace = repaired.lastIndexOf('}');
+    const lastBracket = repaired.lastIndexOf(']');
+    const lastValid = Math.max(lastBrace, lastBracket);
+
+    if (lastValid > 0) {
+      repaired = repaired.substring(0, lastValid + 1);
+    }
+  }
+
+  return repaired;
 }
 
 function constructPrompt(planData: TravelPlanInput): string {

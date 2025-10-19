@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
         mustVisitPlaces?: string;
         specialRequirements?: string;
       },
-    });
+    }, planId);
 
     // Update plan with generated itinerary
     const updatedPlan = await prisma.travelPlan.update({

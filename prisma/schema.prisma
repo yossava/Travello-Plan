@@ -79,3 +79,31 @@ type Preferences {
   mustVisitPlaces       String?
   specialRequirements   String?
 }
+
+model OpenAILog {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  planId          String?  @db.ObjectId
+
+  // Request details
+  model           String
+  prompt          String   @db.String
+  systemMessage   String   @db.String
+  temperature     Float
+  maxTokens       Int
+
+  // Response details
+  response        String?  @db.String
+  completionTokens Int?
+  promptTokens    Int?
+  totalTokens     Int?
+
+  // Status and errors
+  status          String   // success, error, partial
+  errorMessage    String?  @db.String
+  parseError      String?  @db.String
+  wasRepaired     Boolean  @default(false)
+
+  // Metadata
+  durationMs      Int?
+  createdAt       DateTime @default(now())
+}
