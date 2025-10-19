@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
+  const { data: session } = useSession();
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
       {/* Navigation */}
@@ -22,15 +26,41 @@ export default function Home() {
               <a href="#how-it-works" className="text-gray-300 hover:text-white transition-colors">
                 How It Works
               </a>
-              <Link href="/login" className="text-gray-300 hover:text-white transition-colors">
-                Sign In
-              </Link>
-              <Link
-                href="/register"
-                className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105"
-              >
-                Get Started Free
-              </Link>
+              {session ? (
+                <>
+                  <Link href="/dashboard" className="text-gray-300 hover:text-white transition-colors">
+                    Dashboard
+                  </Link>
+                  <Link
+                    href="/plan/new"
+                    className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105 flex items-center"
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create Plan
+                  </Link>
+                  <div className="flex items-center space-x-3">
+                    <div className="w-9 h-9 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                      <span className="text-sm font-semibold text-white">
+                        {session.user?.name?.charAt(0).toUpperCase() || session.user?.email?.charAt(0).toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link href="/login" className="text-gray-300 hover:text-white transition-colors">
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="px-6 py-2.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full font-medium hover:shadow-lg hover:shadow-purple-500/50 transition-all duration-300 hover:scale-105"
+                  >
+                    Get Started Free
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
