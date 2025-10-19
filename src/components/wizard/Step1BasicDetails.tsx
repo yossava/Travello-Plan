@@ -1,5 +1,6 @@
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
+import SearchableSelect from '@/components/ui/SearchableSelect';
 import { CURRENCIES, COUNTRIES } from '@/types/plan';
 
 interface Step1Props {
@@ -47,14 +48,14 @@ export default function Step1BasicDetails({
       <div>
         <h3 className="text-lg font-semibold text-white mb-4">Origin</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Select
+          <SearchableSelect
             id="originCountry"
             label="Country"
             value={formData.origin.country}
-            onChange={(e) =>
+            onChange={(value) =>
               onChange('origin', {
                 ...formData.origin,
-                country: e.target.value,
+                country: value,
               })
             }
             options={COUNTRIES.map((country) => ({
@@ -63,6 +64,7 @@ export default function Step1BasicDetails({
             }))}
             error={errors.originCountry}
             required
+            placeholder="Search countries..."
           />
           <Input
             id="originCity"
@@ -81,14 +83,14 @@ export default function Step1BasicDetails({
       <div>
         <h3 className="text-lg font-semibold text-white mb-4">Destination</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Select
+          <SearchableSelect
             id="destCountry"
             label="Country"
             value={formData.destination.country}
-            onChange={(e) =>
+            onChange={(value) =>
               onChange('destination', {
                 ...formData.destination,
-                country: e.target.value,
+                country: value,
               })
             }
             options={COUNTRIES.map((country) => ({
@@ -97,6 +99,7 @@ export default function Step1BasicDetails({
             }))}
             error={errors.destCountry}
             required
+            placeholder="Search countries..."
           />
           <Input
             id="destCity"
