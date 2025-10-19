@@ -17,6 +17,7 @@ export default function NewPlanPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [generating, setGenerating] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [planId, setPlanId] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<TravelPlanFormData>({
     planName: '',
@@ -38,18 +39,65 @@ export default function NewPlanPage() {
     },
   });
 
-  // Load from localStorage on mount
+  // Load draft plan from API or localStorage on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setFormData(parsed);
-        toast.success('Loaded your draft');
-      } catch {
-        // Ignore parse errors
+    const loadDraftPlan = async () => {
+      // Check if planId is in URL params
+      const params = new URLSearchParams(window.location.search);
+      const urlPlanId = params.get('planId');
+
+      if (urlPlanId) {
+        // Load from API
+        try {
+          const response = await fetch(`/api/plans/${urlPlanId}`);
+          if (response.ok) {
+            const data = await response.json();
+            const plan = data.plan;
+
+            // Convert plan data to form format
+            setFormData({
+              planName: plan.planName || '',
+              origin: plan.origin,
+              destination: plan.destination,
+              departureDate: plan.departureDate ? new Date(plan.departureDate).toISOString().split('T')[0] : '',
+              returnDate: plan.returnDate ? new Date(plan.returnDate).toISOString().split('T')[0] : '',
+              duration: plan.duration,
+              travelers: plan.travelers,
+              budget: plan.budget,
+              preferences: plan.preferences || {
+                tripPurpose: '',
+                accommodationTypes: [],
+                interests: [],
+                travelPace: '',
+                dietaryRestrictions: [],
+                mustVisitPlaces: '',
+                specialRequirements: '',
+              },
+            });
+            setPlanId(urlPlanId);
+            toast.success('Loaded your draft plan');
+            return;
+          }
+        } catch (error) {
+          console.error('Failed to load draft plan:', error);
+          toast.error('Failed to load draft plan');
+        }
       }
-    }
+
+      // Fallback to localStorage
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          setFormData(parsed);
+          toast.success('Loaded your draft');
+        } catch {
+          // Ignore parse errors
+        }
+      }
+    };
+
+    loadDraftPlan();
   }, []);
 
   // Auto-save to localStorage
@@ -149,16 +197,25 @@ export default function NewPlanPage() {
         formData.departureDate
       ).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
 
-      const response = await fetch('/api/plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          planName,
-          departureDate: new Date(formData.departureDate).toISOString(),
-          returnDate: new Date(formData.returnDate).toISOString(),
-        }),
-      });
+      const payload = {
+        ...formData,
+        planName,
+        departureDate: new Date(formData.departureDate).toISOString(),
+        returnDate: new Date(formData.returnDate).toISOString(),
+      };
+
+      // Update existing plan or create new one
+      const response = planId
+        ? await fetch(`/api/plans/${planId}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+        : await fetch('/api/plans', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
 
       if (response.ok) {
         toast.success('Draft saved successfully');
@@ -176,36 +233,57 @@ export default function NewPlanPage() {
   const handleGenerate = async () => {
     setGenerating(true);
     try {
-      // First save the plan
+      // First save or update the plan
       const planName = `${formData.destination.city} Trip - ${new Date(
         formData.departureDate
       ).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}`;
 
-      const createResponse = await fetch('/api/plans', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          planName,
-          departureDate: new Date(formData.departureDate).toISOString(),
-          returnDate: new Date(formData.returnDate).toISOString(),
-        }),
-      });
+      const payload = {
+        ...formData,
+        planName,
+        departureDate: new Date(formData.departureDate).toISOString(),
+        returnDate: new Date(formData.returnDate).toISOString(),
+      };
 
-      if (!createResponse.ok) {
-        const data = await createResponse.json();
-        toast.error(data.error || 'Failed to create plan');
-        setGenerating(false);
-        return;
+      let currentPlanId = planId;
+
+      // Update existing plan or create new one
+      if (planId) {
+        const updateResponse = await fetch(`/api/plans/${planId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!updateResponse.ok) {
+          const data = await updateResponse.json();
+          toast.error(data.error || 'Failed to update plan');
+          setGenerating(false);
+          return;
+        }
+      } else {
+        const createResponse = await fetch('/api/plans', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!createResponse.ok) {
+          const data = await createResponse.json();
+          toast.error(data.error || 'Failed to create plan');
+          setGenerating(false);
+          return;
+        }
+
+        const { plan } = await createResponse.json();
+        currentPlanId = plan.id;
       }
-
-      const { plan } = await createResponse.json();
 
       // Generate itinerary with OpenAI
       const generateResponse = await fetch('/api/ai/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ planId: plan.id }),
+        body: JSON.stringify({ planId: currentPlanId }),
       });
 
       if (!generateResponse.ok) {
@@ -213,13 +291,13 @@ export default function NewPlanPage() {
         toast.error(data.error || 'Failed to generate itinerary');
         setGenerating(false);
         // Redirect to plan page even if generation failed
-        router.push(`/plan/${plan.id}`);
+        router.push(`/plan/${currentPlanId}`);
         return;
       }
 
       toast.success('Your travel plan is ready!');
       localStorage.removeItem(STORAGE_KEY);
-      router.push(`/plan/${plan.id}`);
+      router.push(`/plan/${currentPlanId}`);
     } catch {
       toast.error('An error occurred while generating');
       setGenerating(false);
