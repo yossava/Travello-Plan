@@ -22,7 +22,7 @@ export default function Button({
   className = '',
   ...props
 }: ButtonProps) {
-  const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm';
+  const baseStyles = 'inline-flex flex-row items-center justify-center font-semibold rounded-xl transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm';
 
   const variants = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700 hover:shadow-lg hover:shadow-primary-500/30 focus:ring-primary-500/50 active:scale-95',
@@ -75,9 +75,9 @@ export default function Button({
           ></path>
         </svg>
       )}
-      {!loading && leftIcon && <span>{leftIcon}</span>}
-      <span>{children}</span>
-      {!loading && rightIcon && <span>{rightIcon}</span>}
+      {!loading && leftIcon && leftIcon}
+      {children}
+      {!loading && rightIcon && rightIcon}
     </button>
   );
 }

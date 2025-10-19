@@ -50,7 +50,7 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
               {plan.planName}
             </h3>
             <div className="flex items-center text-gray-300">
-              <svg className="w-4 h-4 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
@@ -66,8 +66,8 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
 
         <div className="space-y-3 mb-6">
           <div className="flex items-center text-sm text-gray-300">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-purple-500/20 mr-3">
-              <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 mr-3">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
@@ -76,8 +76,8 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
             </span>
           </div>
           <div className="flex items-center text-sm text-gray-300">
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-pink-500/20 mr-3">
-              <svg className="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 mr-3">
+              <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -87,13 +87,13 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
 
         <div className="flex space-x-3">
           <Link href={`/plan/${plan.id}`} className="flex-1">
-            <Button variant="gradient" size="md" fullWidth>
+            <Button variant="primary" size="md" fullWidth>
               {plan.status === 'draft' ? 'Continue Planning' : 'View Plan'}
             </Button>
           </Link>
           <button
             onClick={() => onDelete(plan.id)}
-            className="inline-flex items-center justify-center px-4 py-2.5 border-2 border-white/10 text-sm font-medium rounded-xl text-gray-300 bg-white/5 hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-300 focus:outline-none focus:ring-4 focus:ring-red-500/50 transition-all duration-300"
+            className="inline-flex items-center justify-center px-4 py-2.5 border-2 border-white/10 text-sm font-medium rounded-xl text-gray-400 bg-white/5 hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-300 focus:outline-none focus:ring-2 focus:ring-red-500/50 transition-all duration-300"
             title="Delete plan"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

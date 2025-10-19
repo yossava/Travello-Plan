@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import Input from '@/components/ui/Input';
 import Select from '@/components/ui/Select';
 import SearchableSelect from '@/components/ui/SearchableSelect';
+import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 import { CURRENCIES, COUNTRIES } from '@/types/plan';
+import toast from 'react-hot-toast';
 
 interface Step1Props {
   formData: {
@@ -22,6 +26,11 @@ export default function Step1BasicDetails({
   onChange,
 }: Step1Props) {
   const today = new Date().toISOString().split('T')[0];
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+  const [citySuggestions, setCitySuggestions] = useState<
+    Array<{ name: string; description: string }>
+  >([]);
+  const [showSuggestionsModal, setShowSuggestionsModal] = useState(false);
 
   const calculateDuration = () => {
     if (formData.departureDate && formData.returnDate) {
@@ -31,6 +40,41 @@ export default function Step1BasicDetails({
       return Math.ceil(diff / (1000 * 60 * 60 * 24));
     }
     return 0;
+  };
+
+  const handleGetCitySuggestions = async () => {
+    if (!formData.destination.country) {
+      toast.error('Please select a destination country first');
+      return;
+    }
+
+    setLoadingSuggestions(true);
+    try {
+      const response = await fetch('/api/ai/suggest-cities', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ country: formData.destination.country }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to get city suggestions');
+      }
+
+      const data = await response.json();
+      setCitySuggestions(data.cities);
+      setShowSuggestionsModal(true);
+    } catch (error) {
+      toast.error('Failed to get city suggestions');
+      console.error(error);
+    } finally {
+      setLoadingSuggestions(false);
+    }
+  };
+
+  const handleSelectCity = (city: string) => {
+    onChange('destination', { ...formData.destination, city });
+    setShowSuggestionsModal(false);
+    toast.success(`Selected ${city}`);
   };
 
   return (
@@ -101,21 +145,125 @@ export default function Step1BasicDetails({
             required
             placeholder="Search countries..."
           />
-          <Input
-            id="destCity"
-            label="City"
-            value={formData.destination.city}
-            onChange={(e) =>
-              onChange('destination', {
-                ...formData.destination,
-                city: e.target.value,
-              })
-            }
-            error={errors.destCity}
-            required
-          />
+          <div>
+            <label
+              htmlFor="destCity"
+              className="block text-sm font-medium text-gray-200 mb-2"
+            >
+              City <span className="text-red-400">*</span>
+            </label>
+            <div className="flex gap-2">
+              <div className="flex-1">
+                <Input
+                  id="destCity"
+                  value={formData.destination.city}
+                  onChange={(e) =>
+                    onChange('destination', {
+                      ...formData.destination,
+                      city: e.target.value,
+                    })
+                  }
+                  error={errors.destCity}
+                  placeholder="Enter city name"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="secondary"
+                size="md"
+                onClick={handleGetCitySuggestions}
+                disabled={!formData.destination.country || loadingSuggestions}
+                loading={loadingSuggestions}
+                className="whitespace-nowrap bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 hover:border-white/50"
+              >
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                  />
+                </svg>
+                AI Suggest
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* City Suggestions Modal */}
+      <Modal
+        isOpen={showSuggestionsModal}
+        onClose={() => setShowSuggestionsModal(false)}
+        title={`Popular Cities in ${formData.destination.country}`}
+      >
+        <div className="space-y-2">
+          <p className="text-sm text-gray-400 mb-4">
+            Select a city or close this dialog to enter your own
+          </p>
+          <div className="grid grid-cols-1 gap-3">
+            {citySuggestions.map((city) => (
+              <button
+                key={city.name}
+                onClick={() => handleSelectCity(city.name)}
+                className="text-left px-4 py-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all duration-200 border border-white/10 hover:border-primary-500 hover:shadow-lg group"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex-shrink-0 mt-0.5">
+                    <svg
+                      className="w-5 h-5 text-primary-400 group-hover:text-primary-300"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                      />
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                      />
+                    </svg>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-white mb-1 group-hover:text-primary-300 transition-colors">
+                      {city.name}
+                    </div>
+                    <div className="text-sm text-gray-400 leading-relaxed">
+                      {city.description}
+                    </div>
+                  </div>
+                  <div className="flex-shrink-0">
+                    <svg
+                      className="w-5 h-5 text-gray-500 group-hover:text-primary-400 transition-colors"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </Modal>
 
       {/* Dates */}
       <div>
@@ -233,32 +381,36 @@ export default function Step1BasicDetails({
           <Input
             id="minBudget"
             label="Minimum Budget"
-            type="number"
-            value={formData.budget.min}
-            onChange={(e) =>
+            type="text"
+            inputMode="numeric"
+            value={formData.budget.min || ''}
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, '');
               onChange('budget', {
                 ...formData.budget,
-                min: parseFloat(e.target.value) || 0,
-              })
-            }
-            min={0}
+                min: value ? parseInt(value, 10) : 0,
+              });
+            }}
             error={errors.minBudget}
             required
+            placeholder="0"
           />
           <Input
             id="maxBudget"
             label="Maximum Budget"
-            type="number"
-            value={formData.budget.max}
-            onChange={(e) =>
+            type="text"
+            inputMode="numeric"
+            value={formData.budget.max || ''}
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, '');
               onChange('budget', {
                 ...formData.budget,
-                max: parseFloat(e.target.value) || 0,
-              })
-            }
-            min={formData.budget.min || 0}
+                max: value ? parseInt(value, 10) : 0,
+              });
+            }}
             error={errors.maxBudget}
             required
+            placeholder="0"
           />
         </div>
       </div>

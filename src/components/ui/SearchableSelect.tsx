@@ -125,6 +125,7 @@ export default function SearchableSelect({
         {required && <span className="text-red-400 ml-1">*</span>}
       </label>
       <Select
+        instanceId={id}
         inputId={id}
         value={selectedOption}
         onChange={(option) => onChange(option?.value || '')}

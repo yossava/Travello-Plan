@@ -101,162 +101,178 @@ interface TravelPlanData {
 const styles = StyleSheet.create({
   page: {
     backgroundColor: '#ffffff',
-    padding: 30,
+    padding: 40,
+    fontFamily: 'Helvetica',
   },
   header: {
     backgroundColor: '#7c3aed',
-    padding: 30,
-    marginBottom: 20,
-    borderRadius: 8,
+    padding: 40,
+    marginBottom: 30,
+    marginLeft: -40,
+    marginRight: -40,
+    marginTop: -40,
   },
   accentBar: {
     height: 4,
     backgroundColor: '#ec4899',
-    marginBottom: 15,
+    marginBottom: 20,
+    width: '100%',
   },
   title: {
-    fontSize: 28,
+    fontSize: 32,
     fontWeight: 'bold',
     color: '#ffffff',
     textAlign: 'center',
-    marginBottom: 8,
+    marginBottom: 10,
+    letterSpacing: 0.5,
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: 18,
     color: '#e0e7ff',
     textAlign: 'center',
+    fontWeight: 'normal',
   },
   section: {
-    marginBottom: 20,
+    marginBottom: 25,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#7c3aed',
-    marginBottom: 12,
-    paddingBottom: 6,
-    borderBottom: '2 solid #a78bfa',
+    marginBottom: 15,
+    paddingBottom: 8,
+    borderBottom: '2 solid #ddd6fe',
+    letterSpacing: 1,
   },
   card: {
-    backgroundColor: '#f8f9fa',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 12,
+    backgroundColor: '#faf9fc',
+    padding: 20,
+    marginBottom: 15,
     borderLeft: '4 solid #7c3aed',
   },
   cardHeader: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#1e293b',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   row: {
     flexDirection: 'row',
-    marginBottom: 6,
+    marginBottom: 8,
+    alignItems: 'flex-start',
   },
   label: {
-    fontSize: 10,
+    fontSize: 11,
     color: '#64748b',
-    width: 100,
+    width: 120,
     fontWeight: 'bold',
   },
   value: {
-    fontSize: 10,
+    fontSize: 11,
     color: '#0f172a',
     flex: 1,
+    lineHeight: 1.4,
   },
   emergencyCard: {
     backgroundColor: '#fef2f2',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 12,
+    padding: 20,
+    marginBottom: 15,
     borderLeft: '4 solid #ef4444',
   },
   emergencyTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#dc2626',
-    marginBottom: 8,
+    marginBottom: 12,
   },
   flightCard: {
     backgroundColor: '#eff6ff',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 12,
+    padding: 20,
+    marginBottom: 15,
     borderLeft: '4 solid #3b82f6',
   },
   returnFlightCard: {
     backgroundColor: '#fffbeb',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 12,
+    padding: 20,
+    marginBottom: 15,
     borderLeft: '4 solid #f59e0b',
   },
   accommodationCard: {
     backgroundColor: '#f0fdf4',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 12,
+    padding: 20,
+    marginBottom: 15,
     borderLeft: '4 solid #10b981',
   },
   dayHeader: {
     backgroundColor: '#faf5ff',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 10,
+    padding: 15,
+    marginBottom: 15,
     borderLeft: '4 solid #a78bfa',
   },
   dayTitle: {
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: 'bold',
     color: '#7c3aed',
-    marginBottom: 4,
+    marginBottom: 6,
   },
   dayTheme: {
-    fontSize: 10,
+    fontSize: 11,
     color: '#64748b',
     fontStyle: 'italic',
+    lineHeight: 1.3,
   },
   activity: {
     backgroundColor: '#ffffff',
-    padding: 10,
-    borderRadius: 6,
-    marginBottom: 8,
+    padding: 15,
+    marginBottom: 12,
     border: '1 solid #e2e8f0',
   },
   activityHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 6,
+    alignItems: 'center',
+    marginBottom: 10,
   },
   activityTime: {
-    fontSize: 9,
+    fontSize: 10,
     fontWeight: 'bold',
     color: '#ffffff',
     backgroundColor: '#7c3aed',
-    padding: '4 8',
+    padding: '6 12',
     borderRadius: 4,
+    marginRight: 10,
   },
   activityTitle: {
-    fontSize: 11,
+    fontSize: 12,
     fontWeight: 'bold',
     color: '#1e293b',
     flex: 1,
-    marginLeft: 8,
+    lineHeight: 1.3,
   },
   activityDetails: {
+    marginTop: 8,
+    paddingTop: 8,
+    borderTop: '1 solid #f1f5f9',
+  },
+  activityDetailRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    fontSize: 9,
+    marginBottom: 4,
+  },
+  activityDetailLabel: {
+    fontSize: 10,
     color: '#64748b',
+    width: 70,
+  },
+  activityDetailValue: {
+    fontSize: 10,
+    color: '#1e293b',
+    flex: 1,
   },
   budgetItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 10,
+    padding: 12,
     backgroundColor: '#ffffff',
-    borderRadius: 6,
-    marginBottom: 6,
+    marginBottom: 8,
     border: '1 solid #e2e8f0',
   },
   budgetLabel: {
@@ -270,9 +286,8 @@ const styles = StyleSheet.create({
   },
   budgetTotal: {
     backgroundColor: '#7c3aed',
-    padding: 15,
-    borderRadius: 8,
-    marginTop: 10,
+    padding: 20,
+    marginTop: 15,
   },
   budgetTotalRow: {
     flexDirection: 'row',
@@ -288,6 +303,25 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: '#ffffff',
+  },
+  dailyTotal: {
+    backgroundColor: '#f0fdf4',
+    padding: 15,
+    marginTop: 15,
+    borderLeft: '4 solid #10b981',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  dailyTotalLabel: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#047857',
+  },
+  dailyTotalValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#047857',
   },
   footer: {
     position: 'absolute',
@@ -318,7 +352,7 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
 
         {/* Trip Overview */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>✈️ Trip Overview</Text>
+          <Text style={styles.sectionTitle}>TRIP OVERVIEW</Text>
           <View style={styles.card}>
             <View style={styles.row}>
               <Text style={styles.label}>From:</Text>
@@ -368,7 +402,7 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
         {/* Emergency Contacts */}
         {data.itinerary.travelInfo?.emergencyContacts && (
           <View style={styles.section}>
-            <Text style={styles.sectionTitle}>🚨 Emergency Contacts</Text>
+            <Text style={styles.sectionTitle}>EMERGENCY CONTACTS</Text>
             <View style={styles.emergencyCard}>
               <View style={styles.row}>
                 <Text style={styles.label}>Police:</Text>
@@ -404,11 +438,11 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
       {/* Flights Page */}
       {data.itinerary.flights && (
         <Page size="A4" style={styles.page}>
-          <Text style={styles.sectionTitle}>✈️ Flight Information</Text>
+          <Text style={styles.sectionTitle}>FLIGHT INFORMATION</Text>
 
           {/* Outbound Flight */}
           <View style={styles.flightCard}>
-            <Text style={styles.cardHeader}>→ Outbound Flight</Text>
+            <Text style={styles.cardHeader}>Outbound Flight</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Airline:</Text>
               <Text style={styles.value}>
@@ -440,7 +474,7 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
 
           {/* Return Flight */}
           <View style={styles.returnFlightCard}>
-            <Text style={styles.cardHeader}>← Return Flight</Text>
+            <Text style={styles.cardHeader}>Return Flight</Text>
             <View style={styles.row}>
               <Text style={styles.label}>Airline:</Text>
               <Text style={styles.value}>
@@ -473,7 +507,7 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
           {/* Accommodation */}
           {data.itinerary.accommodation && (
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>🏨 Accommodation</Text>
+              <Text style={styles.sectionTitle}>ACCOMMODATION</Text>
               <View style={styles.accommodationCard}>
                 <Text style={styles.cardHeader}>
                   {data.itinerary.accommodation.primary.name}
@@ -531,7 +565,7 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
       {data.itinerary.dailyItinerary &&
         data.itinerary.dailyItinerary.map((day) => (
           <Page key={day.day} size="A4" style={styles.page}>
-            <Text style={styles.sectionTitle}>📅 Daily Itinerary</Text>
+            <Text style={styles.sectionTitle}>DAILY ITINERARY</Text>
 
             <View style={styles.dayHeader}>
               <Text style={styles.dayTitle}>
@@ -552,11 +586,24 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
                   <Text style={styles.activityTitle}>{activity.title}</Text>
                 </View>
                 <View style={styles.activityDetails}>
-                  <Text>📍 {activity.location}</Text>
-                  <Text>⏱️ {activity.duration}</Text>
-                  <Text>
-                    {data.budget.currency} {activity.cost}
-                  </Text>
+                  <View style={styles.activityDetailRow}>
+                    <Text style={styles.activityDetailLabel}>Location:</Text>
+                    <Text style={styles.activityDetailValue}>
+                      {activity.location}
+                    </Text>
+                  </View>
+                  <View style={styles.activityDetailRow}>
+                    <Text style={styles.activityDetailLabel}>Duration:</Text>
+                    <Text style={styles.activityDetailValue}>
+                      {activity.duration}
+                    </Text>
+                  </View>
+                  <View style={styles.activityDetailRow}>
+                    <Text style={styles.activityDetailLabel}>Cost:</Text>
+                    <Text style={styles.activityDetailValue}>
+                      {data.budget.currency} {activity.cost}
+                    </Text>
+                  </View>
                 </View>
               </View>
             ))}
@@ -567,18 +614,10 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
               </Text>
             )}
 
-            <View
-              style={{
-                marginTop: 15,
-                padding: 10,
-                backgroundColor: '#ecfdf5',
-                borderRadius: 6,
-                alignSelf: 'flex-end',
-              }}
-            >
-              <Text style={{ fontSize: 12, fontWeight: 'bold', color: '#047857' }}>
-                Daily Total: {data.budget.currency}{' '}
-                {day.dailyTotal.toLocaleString()}
+            <View style={styles.dailyTotal}>
+              <Text style={styles.dailyTotalLabel}>Daily Total:</Text>
+              <Text style={styles.dailyTotalValue}>
+                {data.budget.currency} {day.dailyTotal.toLocaleString()}
               </Text>
             </View>
 
@@ -595,7 +634,7 @@ const TravelPlanPDF = ({ data }: { data: TravelPlanData }) => {
       {/* Budget Summary Page */}
       {data.itinerary.budgetBreakdown && (
         <Page size="A4" style={styles.page}>
-          <Text style={styles.sectionTitle}>💰 Budget Summary</Text>
+          <Text style={styles.sectionTitle}>BUDGET SUMMARY</Text>
 
           <View style={styles.budgetItem}>
             <Text style={styles.budgetLabel}>Flights</Text>
