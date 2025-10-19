@@ -1,46 +1,25 @@
 'use client';
 
-import { useSession, signOut } from 'next-auth/react';
-import Link from 'next/link';
+import { useSession } from 'next-auth/react';
+import AppLayout from '@/components/layout/AppLayout';
+import Spinner from '@/components/ui/Spinner';
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p>Loading...</p>
-      </div>
+      <AppLayout>
+        <div className="flex items-center justify-center py-12">
+          <Spinner size="lg" />
+        </div>
+      </AppLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold">Travel Planner</h1>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/profile"
-                className="text-gray-700 hover:text-gray-900"
-              >
-                Profile
-              </Link>
-              <button
-                onClick={() => signOut({ callbackUrl: '/login' })}
-                className="text-gray-700 hover:text-gray-900"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <AppLayout>
+      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-gray-900">
@@ -67,7 +46,7 @@ export default function DashboardPage() {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
-import Link from 'next/link';
+import AppLayout from '@/components/layout/AppLayout';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
@@ -88,34 +88,8 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <nav className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/dashboard" className="text-xl font-bold">
-                Travel Planner
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/dashboard"
-                className="text-gray-700 hover:text-gray-900"
-              >
-                Dashboard
-              </Link>
-              <button
-                onClick={() => signOut({ callbackUrl: '/login' })}
-                className="text-gray-700 hover:text-gray-900"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
-
-      <main className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
+    <AppLayout>
+      <div className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">
             Profile Settings
@@ -228,7 +202,7 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
 
       {showDeleteModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
@@ -274,6 +248,6 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
-    </div>
+    </AppLayout>
   );
 }
