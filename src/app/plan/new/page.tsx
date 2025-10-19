@@ -7,6 +7,7 @@ import WizardLayout from '@/components/wizard/WizardLayout';
 import Step1BasicDetails from '@/components/wizard/Step1BasicDetails';
 import Step2Preferences from '@/components/wizard/Step2Preferences';
 import Step3Review from '@/components/wizard/Step3Review';
+import GeneratingModal from '@/components/wizard/GeneratingModal';
 import { TravelPlanFormData } from '@/types/plan';
 
 const STORAGE_KEY = 'travel_plan_draft';
@@ -200,9 +201,23 @@ export default function NewPlanPage() {
 
       const { plan } = await createResponse.json();
 
-      // TODO: Generate itinerary with OpenAI (Phase 6)
-      // For now, just redirect to the plan page
-      toast.success('Plan created! (Itinerary generation coming soon)');
+      // Generate itinerary with OpenAI
+      const generateResponse = await fetch('/api/ai/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ planId: plan.id }),
+      });
+
+      if (!generateResponse.ok) {
+        const data = await generateResponse.json();
+        toast.error(data.error || 'Failed to generate itinerary');
+        setGenerating(false);
+        // Redirect to plan page even if generation failed
+        router.push(`/plan/${plan.id}`);
+        return;
+      }
+
+      toast.success('Your travel plan is ready!');
       localStorage.removeItem(STORAGE_KEY);
       router.push(`/plan/${plan.id}`);
     } catch {
@@ -212,38 +227,41 @@ export default function NewPlanPage() {
   };
 
   return (
-    <WizardLayout
-      currentStep={currentStep}
-      totalSteps={3}
-      onBack={handleBack}
-      onNext={currentStep < 3 ? handleNext : undefined}
-      onSaveDraft={currentStep === 3 ? handleSaveDraft : undefined}
-      showSaveDraft={currentStep === 3}
-      nextLabel={currentStep === 2 ? 'Review' : 'Next'}
-    >
-      {currentStep === 1 && (
-        <Step1BasicDetails
-          formData={formData}
-          errors={errors}
-          onChange={handleFieldChange}
-        />
-      )}
-      {currentStep === 2 && (
-        <Step2Preferences
-          formData={formData}
-          errors={errors}
-          onChange={handleFieldChange}
-        />
-      )}
-      {currentStep === 3 && (
-        <Step3Review
-          formData={formData}
-          onEdit={handleEditStep}
-          onGenerate={handleGenerate}
-          onSaveDraft={handleSaveDraft}
-          generating={generating}
-        />
-      )}
-    </WizardLayout>
+    <>
+      <WizardLayout
+        currentStep={currentStep}
+        totalSteps={3}
+        onBack={handleBack}
+        onNext={currentStep < 3 ? handleNext : undefined}
+        onSaveDraft={currentStep === 3 ? handleSaveDraft : undefined}
+        showSaveDraft={currentStep === 3}
+        nextLabel={currentStep === 2 ? 'Review' : 'Next'}
+      >
+        {currentStep === 1 && (
+          <Step1BasicDetails
+            formData={formData}
+            errors={errors}
+            onChange={handleFieldChange}
+          />
+        )}
+        {currentStep === 2 && (
+          <Step2Preferences
+            formData={formData}
+            errors={errors}
+            onChange={handleFieldChange}
+          />
+        )}
+        {currentStep === 3 && (
+          <Step3Review
+            formData={formData}
+            onEdit={handleEditStep}
+            onGenerate={handleGenerate}
+            onSaveDraft={handleSaveDraft}
+            generating={generating}
+          />
+        )}
+      </WizardLayout>
+      <GeneratingModal isOpen={generating} />
+    </>
   );
 }
