@@ -69,12 +69,13 @@ export default function SearchableSelect({
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: 'rgba(255, 255, 255, 0.05)', // bg-white/5
+      backgroundColor: 'rgb(51 65 85)', // slate-700 - solid background
       backdropFilter: 'blur(8px)', // backdrop-blur-sm
       borderRadius: '0.75rem',
       border: '2px solid rgba(255, 255, 255, 0.2)', // border-white/20
       marginTop: '0.5rem',
-      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.3)',
+      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)',
+      zIndex: 9999,
     }),
     menuList: (provided) => ({
       ...provided,
