@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
+import Button from '@/components/ui/Button';
 
 interface WizardLayoutProps {
   currentStep: number;
@@ -32,8 +33,14 @@ export default function WizardLayout({
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 relative">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Progress Steps */}
         <nav aria-label="Progress" className="mb-8">
           <ol className="flex items-center">
@@ -47,12 +54,12 @@ export default function WizardLayout({
                 <div className="flex items-center">
                   <div className="flex items-center">
                     <div
-                      className={`flex items-center justify-center w-10 h-10 rounded-full border-2 ${
+                      className={`flex items-center justify-center w-12 h-12 rounded-xl border-2 transition-all duration-300 ${
                         step.number < currentStep
-                          ? 'border-primary-600 bg-primary-600'
+                          ? 'border-purple-500 bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/50'
                           : step.number === currentStep
-                          ? 'border-primary-600 bg-white'
-                          : 'border-gray-300 bg-white'
+                          ? 'border-purple-500 bg-white/10 backdrop-blur-xl shadow-lg shadow-purple-500/30'
+                          : 'border-white/20 bg-white/5 backdrop-blur-xl'
                       }`}
                     >
                       {step.number < currentStep ? (
@@ -69,10 +76,10 @@ export default function WizardLayout({
                         </svg>
                       ) : (
                         <span
-                          className={`text-sm font-medium ${
+                          className={`text-sm font-bold ${
                             step.number === currentStep
-                              ? 'text-primary-600'
-                              : 'text-gray-500'
+                              ? 'text-purple-300'
+                              : 'text-gray-400'
                           }`}
                         >
                           {step.number}
@@ -80,12 +87,12 @@ export default function WizardLayout({
                       )}
                     </div>
                     <span
-                      className={`ml-2 text-sm font-medium ${
+                      className={`ml-3 text-sm font-semibold whitespace-nowrap ${
                         step.number === currentStep
-                          ? 'text-primary-600'
+                          ? 'text-purple-300'
                           : step.number < currentStep
-                          ? 'text-gray-900'
-                          : 'text-gray-500'
+                          ? 'text-white'
+                          : 'text-gray-400'
                       }`}
                     >
                       {step.name}
@@ -93,10 +100,10 @@ export default function WizardLayout({
                   </div>
                   {stepIdx !== steps.length - 1 && (
                     <div
-                      className={`flex-1 h-0.5 mx-4 ${
+                      className={`flex-1 h-0.5 mx-6 transition-all duration-300 ${
                         step.number < currentStep
-                          ? 'bg-primary-600'
-                          : 'bg-gray-300'
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500'
+                          : 'bg-white/20'
                       }`}
                     />
                   )}
@@ -107,67 +114,50 @@ export default function WizardLayout({
         </nav>
 
         {/* Content */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">{children}</div>
+        <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl p-8 mb-6">
+          {children}
+        </div>
 
         {/* Navigation Buttons */}
         <div className="flex justify-between items-center">
           <div>
             {currentStep > 1 && (
-              <button
-                type="button"
+              <Button
+                variant="secondary"
                 onClick={onBack}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                leftIcon={
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                }
               >
-                <svg
-                  className="mr-2 -ml-1 h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 19l-7-7 7-7"
-                  />
-                </svg>
                 Back
-              </button>
+              </Button>
             )}
           </div>
 
           <div className="flex space-x-3">
             {showSaveDraft && onSaveDraft && (
-              <button
-                type="button"
+              <Button
+                variant="outline"
                 onClick={onSaveDraft}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
                 Save as Draft
-              </button>
+              </Button>
             )}
             {currentStep < totalSteps && onNext && (
-              <button
-                type="button"
+              <Button
+                variant="gradient"
                 onClick={onNext}
                 disabled={nextDisabled}
-                className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                rightIcon={
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                }
               >
                 {nextLabel}
-                <svg
-                  className="ml-2 -mr-1 h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 5l7 7-7 7"
-                  />
-                </svg>
-              </button>
+              </Button>
             )}
           </div>
         </div>

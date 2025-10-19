@@ -4,6 +4,10 @@ import { useState, useEffect } from 'react';
 import { useSession, signOut } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import AppLayout from '@/components/layout/AppLayout';
+import PageHeader from '@/components/layout/PageHeader';
+import Card from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 
 export default function ProfilePage() {
   const { data: session } = useSession();
@@ -91,163 +95,188 @@ export default function ProfilePage() {
     <AppLayout>
       <div className="max-w-3xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 py-6 sm:px-0">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Profile Settings
-          </h2>
+          <PageHeader
+            title="Profile Settings"
+            description="Manage your account settings and preferences"
+          />
 
-          <div className="bg-white shadow rounded-lg">
+          <Card>
             <form onSubmit={handleUpdateProfile} className="p-6 space-y-6">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-semibold text-gray-200 mb-2"
                 >
                   Full Name
                 </label>
-                <input
-                  type="text"
-                  name="name"
-                  id="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                  />
+                </div>
               </div>
 
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-semibold text-gray-200 mb-2"
                 >
                   Email
                 </label>
-                <input
-                  type="email"
-                  name="email"
-                  id="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                />
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                    </svg>
+                  </div>
+                  <input
+                    type="email"
+                    name="email"
+                    id="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                  />
+                </div>
               </div>
 
-              <div className="border-t border-gray-200 pt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
+              <div className="border-t border-white/10 pt-6">
+                <h3 className="text-lg font-bold text-white mb-4">
                   Change Password
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label
                       htmlFor="currentPassword"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-semibold text-gray-200 mb-2"
                     >
                       Current Password
                     </label>
-                    <input
-                      type="password"
-                      name="currentPassword"
-                      id="currentPassword"
-                      value={formData.currentPassword}
-                      onChange={handleChange}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                    />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <input
+                        type="password"
+                        name="currentPassword"
+                        id="currentPassword"
+                        value={formData.currentPassword}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                      />
+                    </div>
                   </div>
 
                   <div>
                     <label
                       htmlFor="newPassword"
-                      className="block text-sm font-medium text-gray-700"
+                      className="block text-sm font-semibold text-gray-200 mb-2"
                     >
                       New Password
                     </label>
-                    <input
-                      type="password"
-                      name="newPassword"
-                      id="newPassword"
-                      value={formData.newPassword}
-                      onChange={handleChange}
-                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
-                    />
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+                        </svg>
+                      </div>
+                      <input
+                        type="password"
+                        name="newPassword"
+                        id="newPassword"
+                        value={formData.newPassword}
+                        onChange={handleChange}
+                        className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-end">
-                <button
+                <Button
                   type="submit"
-                  disabled={loading}
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
+                  variant="gradient"
+                  size="lg"
+                  loading={loading}
                 >
                   {loading ? 'Saving...' : 'Save Changes'}
-                </button>
+                </Button>
               </div>
             </form>
-          </div>
+          </Card>
 
-          <div className="mt-6 bg-white shadow rounded-lg">
+          <Card className="mt-6">
             <div className="p-6">
-              <h3 className="text-lg font-medium text-red-600 mb-4">
-                Danger Zone
-              </h3>
-              <p className="text-sm text-gray-600 mb-4">
-                Once you delete your account, there is no going back. Please be
-                certain.
-              </p>
-              <button
-                onClick={() => setShowDeleteModal(true)}
-                className="inline-flex justify-center py-2 px-4 border border-red-300 shadow-sm text-sm font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                Delete Account
-              </button>
+              <div className="flex items-start space-x-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                  </div>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-red-400 mb-2">
+                    Danger Zone
+                  </h3>
+                  <p className="text-sm text-gray-300 mb-4">
+                    Once you delete your account, there is no going back. Please be certain.
+                  </p>
+                  <Button
+                    variant="danger"
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Delete Account
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
+          </Card>
         </div>
       </div>
 
-      {showDeleteModal && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Delete Account"
+        footer={
+          <div className="flex space-x-3">
+            <Button
+              variant="danger"
+              onClick={handleDeleteAccount}
+              disabled={loading}
+              fullWidth
+            >
+              {loading ? 'Deleting...' : 'Delete'}
+            </Button>
+            <Button
+              variant="secondary"
               onClick={() => setShowDeleteModal(false)}
-            ></div>
-
-            <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
-              <div>
-                <div className="mt-3 text-center sm:mt-5">
-                  <h3 className="text-lg leading-6 font-medium text-gray-900">
-                    Delete Account
-                  </h3>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      Are you sure you want to delete your account? This action
-                      cannot be undone and all your data will be permanently
-                      removed.
-                    </p>
-                  </div>
-                </div>
-              </div>
-              <div className="mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense">
-                <button
-                  type="button"
-                  onClick={handleDeleteAccount}
-                  disabled={loading}
-                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:col-start-2 sm:text-sm disabled:opacity-50"
-                >
-                  {loading ? 'Deleting...' : 'Delete'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowDeleteModal(false)}
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:mt-0 sm:col-start-1 sm:text-sm"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+              disabled={loading}
+              fullWidth
+            >
+              Cancel
+            </Button>
           </div>
-        </div>
-      )}
+        }
+      >
+        <p className="text-sm">
+          Are you sure you want to delete your account? This action cannot be undone and all your data will be permanently removed.
+        </p>
+      </Modal>
     </AppLayout>
   );
 }

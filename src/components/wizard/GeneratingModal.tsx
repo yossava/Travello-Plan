@@ -49,7 +49,7 @@ export default function GeneratingModal({ isOpen }: GeneratingModalProps) {
       <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
         <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+          className="fixed inset-0 bg-slate-900/90 backdrop-blur-sm transition-opacity"
           aria-hidden="true"
         ></div>
 
@@ -61,40 +61,47 @@ export default function GeneratingModal({ isOpen }: GeneratingModalProps) {
           &#8203;
         </span>
 
-        <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+        <div className="inline-block align-bottom bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl px-4 pt-5 pb-4 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-8">
           <div>
-            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-primary-100 mb-4">
+            {/* Animated spinner container */}
+            <div className="mx-auto flex items-center justify-center h-24 w-24 rounded-2xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 mb-6">
               <Spinner size="lg" />
             </div>
+
             <div className="mt-3 text-center sm:mt-5">
               <h3
                 id="generating-title"
-                className="text-lg leading-6 font-medium text-gray-900 mb-2"
+                className="text-2xl leading-6 font-bold text-white mb-4"
               >
                 Creating Your Itinerary
               </h3>
-              <div className="mt-2">
+              <div className="mt-4">
                 <p
-                  className="text-sm text-gray-500 min-h-[40px] flex items-center justify-center"
+                  className="text-base text-purple-200 min-h-[48px] flex items-center justify-center font-medium"
                   aria-live="polite"
                   aria-atomic="true"
                 >
                   {PROGRESS_MESSAGES[messageIndex]}
                 </p>
               </div>
-              <div className="mt-4">
-                <div className="flex space-x-1 justify-center">
+
+              {/* Progress dots */}
+              <div className="mt-6">
+                <div className="flex space-x-2 justify-center">
                   {PROGRESS_MESSAGES.map((_, idx) => (
                     <div
                       key={idx}
-                      className={`h-1.5 w-8 rounded-full transition-colors ${
-                        idx <= messageIndex ? 'bg-primary-600' : 'bg-gray-200'
+                      className={`h-2 w-10 rounded-full transition-all duration-500 ${
+                        idx <= messageIndex
+                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 shadow-lg shadow-purple-500/50'
+                          : 'bg-white/20'
                       }`}
                     />
                   ))}
                 </div>
               </div>
-              <p className="mt-4 text-xs text-gray-400">
+
+              <p className="mt-6 text-sm text-gray-400">
                 This may take 20-30 seconds...
               </p>
             </div>
