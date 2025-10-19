@@ -12,6 +12,7 @@ import AccommodationSection from '@/components/itinerary/AccommodationSection';
 import DailyItinerarySection from '@/components/itinerary/DailyItinerarySection';
 import BudgetSection from '@/components/itinerary/BudgetSection';
 import TravelInfoSection from '@/components/itinerary/TravelInfoSection';
+import { generateTravelPlanPDF } from '@/lib/pdfGenerator';
 
 interface Activity {
   time: string;
@@ -261,6 +262,19 @@ export default function PlanDetailPage() {
     }
   };
 
+  const handleExportPDF = () => {
+    if (!plan || !plan.itinerary) return;
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      generateTravelPlanPDF(plan as any);
+      toast.success('PDF downloaded successfully!');
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error('Failed to generate PDF');
+    }
+  };
+
   if (loading) {
     return (
       <AppLayout>
@@ -370,7 +384,7 @@ export default function PlanDetailPage() {
                     Finalize Plan
                   </Button>
                 )}
-                <Button variant="secondary">
+                <Button variant="secondary" onClick={handleExportPDF}>
                   <svg
                     className="w-5 h-5 mr-2"
                     fill="none"
