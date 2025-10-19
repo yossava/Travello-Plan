@@ -28,10 +28,10 @@ interface TravelPlanInput {
 export async function generateItinerary(planData: TravelPlanInput, planId?: string): Promise<Prisma.JsonValue> {
   const startTime = Date.now();
   const prompt = constructPrompt(planData);
-  const systemMessage = 'You are an expert travel planner with deep knowledge of destinations worldwide. Create detailed, personalized travel itineraries with realistic recommendations, pricing, and schedules.';
+  const systemMessage = 'You are an expert travel planner with deep knowledge of destinations worldwide. Create detailed, personalized travel itineraries with realistic recommendations, pricing, and schedules. IMPORTANT: You MUST complete the entire JSON response. If you need to keep it concise, reduce the detail per activity but ensure all required fields are present and the JSON is valid and complete.';
   const model = 'gpt-4o';
   const temperature = 0.7;
-  const maxTokens = 6000;
+  const maxTokens = 16000; // Increased from 6000 to prevent truncation
 
   let logId: string | undefined;
   let completion: OpenAI.Chat.Completions.ChatCompletion;
@@ -202,8 +202,33 @@ function repairJSON(jsonString: string): string {
   repaired = repaired.replace(/}(\s*){/g, '},\n{');
   repaired = repaired.replace(/](\s*)\[/g, '],\n[');
 
-  // Fix unescaped quotes in strings (basic attempt)
-  // This is tricky and may not catch all cases
+  // Handle truncated strings at the end
+  // Look for unterminated string literals (quote without closing quote)
+  // Find the last occurrence of a quote
+  const lastQuote = repaired.lastIndexOf('"');
+  if (lastQuote > 0) {
+    // Check if this quote is part of an unterminated string
+    // Count quotes to see if we have an odd number (unterminated)
+    const beforeLastQuote = repaired.substring(0, lastQuote);
+    const quoteCount = (beforeLastQuote.match(/"/g) || []).length;
+
+    // If odd number of quotes before the last one, we have an unterminated string
+    if (quoteCount % 2 === 0) {
+      // The last quote starts an unterminated string
+      // Remove everything from the last quote onwards, including the quote
+      repaired = repaired.substring(0, lastQuote);
+
+      // Also remove any trailing comma or colon that might precede it
+      repaired = repaired.replace(/[,:]\s*$/, '');
+    }
+  }
+
+  // Remove incomplete key-value pairs at the end
+  // Look for patterns like: "key": (no value)
+  repaired = repaired.replace(/,?\s*"[^"]*"\s*:\s*$/g, '');
+
+  // Remove incomplete values (numbers, booleans, null started but not finished)
+  repaired = repaired.replace(/,?\s*"[^"]*"\s*:\s*[a-z0-9]*$/gi, '');
 
   // Try to fix truncated JSON by closing open braces/brackets
   const openBraces = (repaired.match(/{/g) || []).length;
@@ -211,32 +236,21 @@ function repairJSON(jsonString: string): string {
   const openBrackets = (repaired.match(/\[/g) || []).length;
   const closeBrackets = (repaired.match(/]/g) || []).length;
 
+  // Remove trailing comma before adding closing braces/brackets
+  repaired = repaired.replace(/,\s*$/, '');
+
+  // Add missing closing brackets first (arrays before objects)
+  for (let i = 0; i < openBrackets - closeBrackets; i++) {
+    repaired += '\n]';
+  }
+
   // Add missing closing braces
   for (let i = 0; i < openBraces - closeBraces; i++) {
     repaired += '\n}';
   }
 
-  // Add missing closing brackets
-  for (let i = 0; i < openBrackets - closeBrackets; i++) {
-    repaired += '\n]';
-  }
-
-  // Remove incomplete key-value pairs at the end
-  // Look for patterns like: "key": "value (incomplete)
-  repaired = repaired.replace(/,?\s*"[^"]*":\s*"[^"]*$/g, '');
-  repaired = repaired.replace(/,?\s*"[^"]*":\s*[^,}\]]*$/g, '');
-
-  // Ensure the string ends properly
-  if (!repaired.endsWith('}') && !repaired.endsWith(']')) {
-    // Find the last valid closing character
-    const lastBrace = repaired.lastIndexOf('}');
-    const lastBracket = repaired.lastIndexOf(']');
-    const lastValid = Math.max(lastBrace, lastBracket);
-
-    if (lastValid > 0) {
-      repaired = repaired.substring(0, lastValid + 1);
-    }
-  }
+  // Final cleanup: ensure no trailing commas before closing
+  repaired = repaired.replace(/,(\s*[}\]])/g, '$1');
 
   return repaired;
 }
