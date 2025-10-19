@@ -347,7 +347,7 @@ export async function generateBeautifulPDF(
     });
 
     yPosition -= 30;
-    drawText('→ Outbound Flight', margin + 20, yPosition, {
+    drawText('Outbound Flight', margin + 20, yPosition, {
       size: 14,
       font: helveticaBold,
       color: rgb(0.118, 0.251, 0.690),
@@ -379,7 +379,7 @@ export async function generateBeautifulPDF(
     });
 
     yPosition -= 30;
-    drawText('← Return Flight', margin + 20, yPosition, {
+    drawText('Return Flight', margin + 20, yPosition, {
       size: 14,
       font: helveticaBold,
       color: rgb(0.706, 0.325, 0.035),
