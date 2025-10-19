@@ -237,7 +237,7 @@ export async function generateBeautifulPDF(
   });
 
   yPosition -= 30;
-  drawText('✈️ Trip Overview', margin + 20, yPosition, {
+  drawText('Trip Overview', margin + 20, yPosition, {
     size: 16,
     font: helveticaBold,
     color: COLORS.primary,
@@ -303,7 +303,7 @@ export async function generateBeautifulPDF(
     });
 
     yPosition -= 30;
-    drawText('🚨 Emergency Contacts', margin + 20, yPosition, {
+    drawText('EMERGENCY CONTACTS', margin + 20, yPosition, {
       size: 14,
       font: helveticaBold,
       color: COLORS.danger,
@@ -330,7 +330,7 @@ export async function generateBeautifulPDF(
   if (planData.itinerary.flights) {
     addNewPage();
 
-    drawText('✈️ Flight Information', margin, yPosition, {
+    drawText('Flight Information', margin, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
@@ -407,7 +407,7 @@ export async function generateBeautifulPDF(
   if (planData.itinerary.accommodation) {
     checkPageSpace(200);
 
-    drawText('🏨 Accommodation', margin, yPosition, {
+    drawText('Accommodation', margin, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
@@ -459,7 +459,7 @@ export async function generateBeautifulPDF(
   ) {
     addNewPage();
 
-    drawText('📅 Daily Itinerary', margin, yPosition, {
+    drawText('Daily Itinerary', margin, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
@@ -534,7 +534,7 @@ export async function generateBeautifulPDF(
         yPosition -= 20;
 
         // Location and cost
-        drawText(`📍 ${activity.location}`, margin + 10, yPosition, {
+        drawText(`Location: ${activity.location}`, margin + 10, yPosition, {
           size: 9,
           color: COLORS.textLight,
           maxWidth: 250,
@@ -589,7 +589,7 @@ export async function generateBeautifulPDF(
   if (planData.itinerary.budgetBreakdown) {
     addNewPage();
 
-    drawText('💰 Budget Summary', margin, yPosition, {
+    drawText('Budget Summary', margin, yPosition, {
       size: 18,
       font: helveticaBold,
       color: COLORS.primary,
