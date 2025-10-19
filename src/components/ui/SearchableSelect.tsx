@@ -28,23 +28,25 @@ export default function SearchableSelect({
 }: SearchableSelectProps) {
   const selectedOption = options.find((opt) => opt.value === value) || null;
 
-  // Custom styles to match the dark theme
+  // Custom styles to match the dark theme and Input component
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: 'rgb(30 41 59)', // slate-800
+      backgroundColor: 'rgba(255, 255, 255, 0.05)', // bg-white/5
+      backdropFilter: 'blur(8px)', // backdrop-blur-sm
       borderColor: error
-        ? 'rgb(239 68 68)' // red-500
+        ? 'rgb(248 113 113)' // red-400
         : state.isFocused
           ? 'rgb(168 85 247)' // purple-500
-          : 'rgb(71 85 105)', // slate-600
-      borderWidth: '1px',
+          : 'rgba(255, 255, 255, 0.2)', // border-white/20
+      borderWidth: '2px',
       borderRadius: '0.75rem',
       padding: '0.375rem 0.5rem',
       minHeight: '3rem',
-      boxShadow: state.isFocused ? '0 0 0 3px rgba(168, 85, 247, 0.1)' : 'none',
+      boxShadow: state.isFocused ? '0 0 0 4px rgba(168, 85, 247, 0.5)' : 'none',
+      transition: 'all 0.2s',
       '&:hover': {
-        borderColor: error ? 'rgb(239 68 68)' : 'rgb(168 85 247)',
+        borderColor: error ? 'rgb(248 113 113)' : 'rgba(255, 255, 255, 0.3)',
       },
     }),
     valueContainer: (provided) => ({
@@ -67,10 +69,11 @@ export default function SearchableSelect({
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: 'rgb(30 41 59)', // slate-800
+      backgroundColor: 'rgba(255, 255, 255, 0.05)', // bg-white/5
+      backdropFilter: 'blur(8px)', // backdrop-blur-sm
       borderRadius: '0.75rem',
-      border: '1px solid rgb(71 85 105)', // slate-600
-      marginTop: '0.25rem',
+      border: '2px solid rgba(255, 255, 255, 0.2)', // border-white/20
+      marginTop: '0.5rem',
       boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.3)',
     }),
     menuList: (provided) => ({
@@ -83,7 +86,7 @@ export default function SearchableSelect({
       backgroundColor: state.isSelected
         ? 'rgb(168 85 247)' // purple-500
         : state.isFocused
-          ? 'rgb(51 65 85)' // slate-700
+          ? 'rgba(255, 255, 255, 0.1)' // white/10 for hover
           : 'transparent',
       color: 'rgb(255 255 255)',
       padding: '0.75rem 1rem',
@@ -116,7 +119,7 @@ export default function SearchableSelect({
 
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="block text-sm font-medium text-gray-200">
+      <label htmlFor={id} className="block text-sm font-semibold text-white mb-2">
         {label}
         {required && <span className="text-red-400 ml-1">*</span>}
       </label>
