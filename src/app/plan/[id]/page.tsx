@@ -14,7 +14,6 @@ import AccommodationSection from '@/components/itinerary/AccommodationSection';
 import DailyItinerarySection from '@/components/itinerary/DailyItinerarySection';
 import BudgetSection from '@/components/itinerary/BudgetSection';
 import TravelInfoSection from '@/components/itinerary/TravelInfoSection';
-import { generateTravelPlanPDF } from '@/lib/pdfGenerator';
 
 interface Activity {
   time: string;
@@ -264,16 +263,37 @@ export default function PlanDetailPage() {
     }
   };
 
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     if (!plan || !plan.itinerary) return;
 
+    const loadingToast = toast.loading('Generating beautiful PDF...');
+
     try {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      generateTravelPlanPDF(plan as any);
-      toast.success('PDF downloaded successfully!');
+      const response = await fetch(`/api/plans/${params.id}/export-pdf`);
+
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+
+      // Get the PDF blob
+      const blob = await response.blob();
+
+      // Create download link
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${plan.planName.replace(/[^a-z0-9]/gi, '_')}_Travel_Plan.pdf`;
+      document.body.appendChild(a);
+      a.click();
+
+      // Cleanup
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast.success('PDF downloaded successfully!', { id: loadingToast });
     } catch (error) {
-      console.error('PDF generation error:', error);
-      toast.error('Failed to generate PDF');
+      console.error('PDF generation error:', error); // eslint-disable-line no-console
+      toast.error('Failed to generate PDF', { id: loadingToast });
     }
   };
 
