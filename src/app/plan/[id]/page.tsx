@@ -7,6 +7,101 @@ import AppLayout from '@/components/layout/AppLayout';
 import Spinner from '@/components/ui/Spinner';
 import Button from '@/components/ui/Button';
 import Link from 'next/link';
+import FlightsSection from '@/components/itinerary/FlightsSection';
+import AccommodationSection from '@/components/itinerary/AccommodationSection';
+import DailyItinerarySection from '@/components/itinerary/DailyItinerarySection';
+import BudgetSection from '@/components/itinerary/BudgetSection';
+import TravelInfoSection from '@/components/itinerary/TravelInfoSection';
+
+interface Activity {
+  time: string;
+  type: string;
+  title: string;
+  description: string;
+  location: string;
+  address?: string;
+  duration: string;
+  cost: number;
+  openingHours?: string;
+  travelTimeToNext?: string;
+  notes?: string;
+}
+
+interface DayItinerary {
+  day: number;
+  date: string;
+  theme?: string;
+  weather?: string;
+  activities: Activity[];
+  dailyTotal: number;
+}
+
+interface FlightDetails {
+  airline: string;
+  flightNumber: string;
+  departure: { airport: string; time: string; terminal?: string };
+  arrival: { airport: string; time: string; terminal?: string };
+  duration: string;
+  class: string;
+  estimatedCost: number;
+  layovers?: Array<{ airport: string; duration: string }>;
+  bookingTips?: string;
+}
+
+interface Accommodation {
+  name: string;
+  type: string;
+  address: string;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  pricePerNight: number;
+  totalCost: number;
+  amenities: string[];
+  proximityToAttractions?: string;
+  whyRecommended?: string;
+}
+
+interface BudgetBreakdown {
+  flights: number;
+  accommodation: number;
+  food: number;
+  activities: number;
+  transportation: number;
+  shopping: number;
+  emergencyFund: number;
+  total: number;
+  perPerson: number;
+  dailyAverage: number;
+}
+
+interface TravelInfo {
+  visaRequirements: string;
+  healthAndSafety: string;
+  currency: {
+    name: string;
+    exchangeRate: string;
+    tips: string;
+  };
+  language: {
+    primary: string;
+    usefulPhrases: string[];
+  };
+  simAndConnectivity: string;
+  transportation: {
+    overview: string;
+    options: string[];
+  };
+  tipping: string;
+  emergencyContacts: {
+    police: string;
+    ambulance: string;
+    embassy: string;
+  };
+  weather: string;
+  packingList: string[];
+  culturalTips: string[];
+}
 
 interface TravelPlan {
   id: string;
@@ -20,8 +115,17 @@ interface TravelPlan {
   budget: { currency: string; min: number; max: number };
   status: string;
   itinerary?: {
-    dailyItinerary?: Array<{ activities?: unknown[] }>;
-    budgetBreakdown?: { total?: number; dailyAverage?: number };
+    dailyItinerary?: DayItinerary[];
+    budgetBreakdown?: BudgetBreakdown;
+    flights?: {
+      outbound: FlightDetails;
+      return: FlightDetails;
+    };
+    accommodation?: {
+      primary: Accommodation;
+      alternatives?: Accommodation[];
+    };
+    travelInfo?: TravelInfo;
   };
 }
 
@@ -31,6 +135,8 @@ export default function PlanDetailPage() {
   const [plan, setPlan] = useState<TravelPlan | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const fetchPlan = async () => {
     try {
@@ -69,6 +175,91 @@ export default function PlanDetailPage() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
+
+  const handleUpdateActivity = (
+    dayIndex: number,
+    activityIndex: number,
+    updatedActivity: Activity
+  ) => {
+    if (!plan?.itinerary?.dailyItinerary) return;
+
+    const updatedPlan = { ...plan };
+    if (updatedPlan.itinerary?.dailyItinerary) {
+      updatedPlan.itinerary.dailyItinerary[dayIndex].activities[activityIndex] =
+        updatedActivity;
+
+      // Recalculate daily total
+      updatedPlan.itinerary.dailyItinerary[dayIndex].dailyTotal =
+        updatedPlan.itinerary.dailyItinerary[dayIndex].activities.reduce(
+          (sum, activity) => sum + activity.cost,
+          0
+        );
+
+      setPlan(updatedPlan);
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    if (!plan) return;
+
+    try {
+      setIsSaving(true);
+      const response = await fetch(`/api/plans/${params.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          itinerary: plan.itinerary,
+        }),
+      });
+
+      if (!response.ok) {
+        toast.error('Failed to save changes');
+        return;
+      }
+
+      toast.success('Changes saved successfully');
+      setIsEditMode(false);
+    } catch {
+      toast.error('An error occurred while saving');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditMode(false);
+    fetchPlan(); // Reload original data
+  };
+
+  const handleFinalizePlan = async () => {
+    if (!plan || plan.status === 'finalized') return;
+
+    if (
+      !confirm(
+        'Are you sure you want to finalize this plan? Once finalized, you can still view and export it, but major changes will be locked.'
+      )
+    ) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/plans/${params.id}/finalize`, {
+        method: 'POST',
+      });
+
+      if (!response.ok) {
+        toast.error('Failed to finalize plan');
+        return;
+      }
+
+      toast.success('Plan finalized successfully!');
+      fetchPlan(); // Refresh to show new status
+    } catch {
+      toast.error('An error occurred while finalizing the plan');
+    }
+  };
 
   if (loading) {
     return (
@@ -138,23 +329,78 @@ export default function PlanDetailPage() {
                 Back
               </Button>
             </Link>
-            {plan.itinerary && (
-              <Button variant="secondary">
-                <svg
-                  className="w-5 h-5 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+            {plan.itinerary && !isEditMode && (
+              <>
+                {plan.status !== 'finalized' && (
+                  <Button
+                    variant="secondary"
+                    onClick={() => setIsEditMode(true)}
+                  >
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+                      />
+                    </svg>
+                    Edit
+                  </Button>
+                )}
+                {plan.status === 'generated' && (
+                  <Button onClick={handleFinalizePlan}>
+                    <svg
+                      className="w-5 h-5 mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    Finalize Plan
+                  </Button>
+                )}
+                <Button variant="secondary">
+                  <svg
+                    className="w-5 h-5 mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  Export PDF
+                </Button>
+              </>
+            )}
+            {isEditMode && (
+              <>
+                <Button
+                  variant="secondary"
+                  onClick={handleCancelEdit}
+                  disabled={isSaving}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-                Export PDF
-              </Button>
+                  Cancel
+                </Button>
+                <Button onClick={handleSaveChanges} disabled={isSaving}>
+                  {isSaving ? 'Saving...' : 'Save Changes'}
+                </Button>
+              </>
             )}
           </div>
         </div>
@@ -187,6 +433,63 @@ export default function PlanDetailPage() {
                 <div className="mt-4">
                   <Button size="sm">Continue Planning</Button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Finalized Plan Banner */}
+        {plan.status === 'finalized' && (
+          <div className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-green-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-green-800">
+                  Plan Finalized
+                </h3>
+                <p className="mt-1 text-sm text-green-700">
+                  This plan has been finalized and is ready for your trip! You
+                  can export it to PDF for offline access.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Edit Mode Banner */}
+        {isEditMode && (
+          <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg
+                  className="h-5 w-5 text-blue-400"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h3 className="text-sm font-medium text-blue-800">
+                  Edit Mode Active
+                </h3>
+                <p className="mt-1 text-sm text-blue-700">
+                  You can now edit activities in your itinerary. Click the edit
+                  icon next to any activity to modify it. Don&apos;t forget to save your
+                  changes when done.
+                </p>
               </div>
             </div>
           </div>
@@ -371,38 +674,43 @@ export default function PlanDetailPage() {
             </div>
           )}
 
-          {activeTab === 'flights' && plan.itinerary && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">Flights section (coming soon)</p>
-            </div>
+          {activeTab === 'flights' && plan.itinerary?.flights && (
+            <FlightsSection
+              flights={plan.itinerary.flights}
+              currency={plan.budget.currency}
+            />
           )}
 
-          {activeTab === 'accommodation' && plan.itinerary && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">
-                Accommodation section (coming soon)
-              </p>
-            </div>
+          {activeTab === 'accommodation' && plan.itinerary?.accommodation && (
+            <AccommodationSection
+              accommodation={plan.itinerary.accommodation}
+              currency={plan.budget.currency}
+            />
           )}
 
-          {activeTab === 'itinerary' && plan.itinerary && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">
-                Daily itinerary section (coming soon)
-              </p>
-            </div>
+          {activeTab === 'itinerary' && plan.itinerary?.dailyItinerary && (
+            <DailyItinerarySection
+              dailyItinerary={plan.itinerary.dailyItinerary}
+              currency={plan.budget.currency}
+              editable={isEditMode}
+              onUpdateActivity={handleUpdateActivity}
+            />
           )}
 
-          {activeTab === 'budget' && plan.itinerary && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">Budget section (coming soon)</p>
-            </div>
+          {activeTab === 'budget' && plan.itinerary?.budgetBreakdown && (
+            <BudgetSection
+              budgetBreakdown={plan.itinerary.budgetBreakdown}
+              currency={plan.budget.currency}
+              travelers={
+                plan.travelers.adults +
+                plan.travelers.children +
+                plan.travelers.infants
+              }
+            />
           )}
 
-          {activeTab === 'info' && plan.itinerary && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">Travel info section (coming soon)</p>
-            </div>
+          {activeTab === 'info' && plan.itinerary?.travelInfo && (
+            <TravelInfoSection travelInfo={plan.itinerary.travelInfo} />
           )}
         </div>
       </div>

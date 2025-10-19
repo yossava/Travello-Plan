@@ -121,3 +121,48 @@ export async function PUT(
     );
   }
 }
+
+// PATCH /api/plans/:id - Partially update a plan (e.g., itinerary edits)
+export async function PATCH(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session?.user?.id) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const plan = await prisma.travelPlan.findUnique({
+      where: { id: params.id },
+    });
+
+    if (!plan) {
+      return NextResponse.json({ error: 'Plan not found' }, { status: 404 });
+    }
+
+    // Check ownership
+    if (plan.userId !== session.user.id) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    const body = await request.json();
+
+    const updatedPlan = await prisma.travelPlan.update({
+      where: { id: params.id },
+      data: {
+        ...body,
+        updatedAt: new Date(),
+      },
+    });
+
+    return NextResponse.json({ plan: updatedPlan });
+  } catch (error) {
+    console.error('Patch plan error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}
