@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { motion } from 'framer-motion';
 import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
 import SearchableSelect from '@/components/ui/SearchableSelect';
@@ -130,86 +131,132 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative">
             {/* Floating Badge */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-20">
-              <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-full text-sm font-medium shadow-xl shadow-emerald-500/30">
+            <motion.div
+              className="absolute top-0 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-20"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div
+                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-full text-sm font-medium shadow-xl shadow-emerald-500/30"
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+              >
                 <span className="w-2 h-2 bg-white rounded-full mr-2 animate-pulse"></span>
                 AI-Powered Planning
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start pt-16">
               {/* Left Content - 7 columns */}
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-6">
-                  <h1 className="text-6xl md:text-8xl font-black text-gray-900 leading-[1.2] tracking-tight font-display">
+                  <motion.h1
+                    className="text-6xl md:text-8xl font-black text-gray-900 leading-[1.2] tracking-tight font-display"
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.3 }}
+                  >
                     Travel
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 mt-2 pb-4">
+                    <motion.span
+                      className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 mt-2 pb-4"
+                      initial={{ opacity: 0, x: -30 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.8, delay: 0.5 }}
+                    >
                       Reimagined
-                    </span>
-                  </h1>
+                    </motion.span>
+                  </motion.h1>
 
-                  <p className="text-xl md:text-2xl text-gray-600 font-light max-w-xl leading-relaxed">
+                  <motion.p
+                    className="text-xl md:text-2xl text-gray-600 font-light max-w-xl leading-relaxed"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.7 }}
+                  >
                     AI that understands your wanderlust. Create extraordinary journeys tailored to your style in seconds.
-                  </p>
+                  </motion.p>
                 </div>
 
                 {/* Stats */}
-                <div className="flex flex-wrap gap-4 pt-4">
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                    <div className="relative bg-white/80 backdrop-blur-sm border border-blue-500/20 rounded-xl px-4 py-3 hover:border-blue-500/40 transition-all duration-300">
-                      <div className="text-3xl font-black bg-gradient-to-r from-blue-600 to-cyan-500 text-transparent bg-clip-text font-display">10K+</div>
-                      <div className="text-xs text-gray-600 font-semibold mt-0.5">Trips Planned</div>
-                    </div>
-                  </div>
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                    <div className="relative bg-white/80 backdrop-blur-sm border border-purple-500/20 rounded-xl px-4 py-3 hover:border-purple-500/40 transition-all duration-300">
-                      <div className="text-3xl font-black bg-gradient-to-r from-purple-600 to-pink-500 text-transparent bg-clip-text font-display">150+</div>
-                      <div className="text-xs text-gray-600 font-semibold mt-0.5">Countries</div>
-                    </div>
-                  </div>
-                  <div className="relative group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/20 to-orange-500/20 rounded-xl blur-lg group-hover:blur-xl transition-all duration-300"></div>
-                    <div className="relative bg-white/80 backdrop-blur-sm border border-amber-500/20 rounded-xl px-4 py-3 hover:border-amber-500/40 transition-all duration-300">
-                      <div className="flex items-center gap-1">
-                        <div className="text-3xl font-black bg-gradient-to-r from-amber-500 to-orange-500 text-transparent bg-clip-text font-display">4.9</div>
-                        <svg className="w-6 h-6 text-amber-400 fill-current" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
+                <motion.div
+                  className="flex flex-wrap gap-4 pt-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.9 }}
+                >
+                  {[
+                    { number: '10K+', label: 'Trips Planned', gradient: 'from-blue-600 to-cyan-500', borderColor: 'border-blue-500/20', hoverBorder: 'hover:border-blue-500/40', bgGradient: 'from-blue-500/20 to-cyan-500/20', delay: 0 },
+                    { number: '150+', label: 'Countries', gradient: 'from-purple-600 to-pink-500', borderColor: 'border-purple-500/20', hoverBorder: 'hover:border-purple-500/40', bgGradient: 'from-purple-500/20 to-pink-500/20', delay: 0.1 },
+                    { number: '4.9', label: 'User Rating', gradient: 'from-amber-500 to-orange-500', borderColor: 'border-amber-500/20', hoverBorder: 'hover:border-amber-500/40', bgGradient: 'from-amber-500/20 to-orange-500/20', delay: 0.2, star: true }
+                  ].map((stat, index) => (
+                    <motion.div
+                      key={stat.label}
+                      className="relative group"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.9 + stat.delay }}
+                      whileHover={{ scale: 1.05 }}
+                    >
+                      <div className={`absolute inset-0 bg-gradient-to-r ${stat.bgGradient} rounded-xl blur-lg group-hover:blur-xl transition-all duration-300`}></div>
+                      <div className={`relative bg-white/80 backdrop-blur-sm border ${stat.borderColor} rounded-xl px-4 py-3 ${stat.hoverBorder} transition-all duration-300`}>
+                        <div className="flex items-center gap-1">
+                          <div className={`text-3xl font-black bg-gradient-to-r ${stat.gradient} text-transparent bg-clip-text font-display`}>{stat.number}</div>
+                          {stat.star && (
+                            <svg className="w-6 h-6 text-amber-400 fill-current" viewBox="0 0 20 20">
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          )}
+                        </div>
+                        <div className="text-xs text-gray-600 font-semibold mt-0.5">{stat.label}</div>
                       </div>
-                      <div className="text-xs text-gray-600 font-semibold mt-0.5">User Rating</div>
-                    </div>
-                  </div>
-                </div>
+                    </motion.div>
+                  ))}
+                </motion.div>
 
                 {/* CTA Buttons */}
                 {session ? (
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <Link
-                      href="/plan/new"
-                      className="group px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 hover:scale-105 flex items-center"
-                    >
-                      Start Planning
-                      <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </Link>
-                  </div>
+                  <motion.div
+                    className="flex flex-wrap gap-4 pt-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                  >
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Link
+                        href="/plan/new"
+                        className="group px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center"
+                      >
+                        Start Planning
+                        <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </Link>
+                    </motion.div>
+                  </motion.div>
                 ) : (
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <Link
-                      href="/register"
-                      className="group px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 hover:scale-105 flex items-center"
-                    >
-                      Get Started Free
-                      <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
-                    </Link>
-                    <a
+                  <motion.div
+                    className="flex flex-wrap gap-4 pt-4"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: 1.2 }}
+                  >
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <Link
+                        href="/register"
+                        className="group px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center"
+                      >
+                        Get Started Free
+                        <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                        </svg>
+                      </Link>
+                    </motion.div>
+                    <motion.a
                       href="#destinations"
                       className="px-8 py-4 border-2 border-gray-900 text-gray-900 rounded-2xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 flex items-center"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
                       Explore Destinations
                     </a>
@@ -440,24 +487,55 @@ export default function Home() {
         <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full blur-3xl opacity-50"></div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="mb-20">
-            <div className="inline-block mb-4">
+          <motion.div
+            className="mb-20"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div
+              className="inline-block mb-4"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
               <span className="px-4 py-2 bg-gray-900 text-white rounded-full text-sm font-semibold uppercase tracking-wider">
                 Destinations
               </span>
-            </div>
-            <h2 className="text-5xl md:text-7xl font-black text-gray-900 mb-6 max-w-3xl font-display">
+            </motion.div>
+            <motion.h2
+              className="text-5xl md:text-7xl font-black text-gray-900 mb-6 max-w-3xl font-display"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               Where will your story begin?
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl font-light">
+            </motion.h2>
+            <motion.p
+              className="text-xl text-gray-600 max-w-2xl font-light"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
               From hidden gems to iconic landmarks — AI-curated experiences for every type of traveler
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           {/* Asymmetric Grid */}
           <div className="grid grid-cols-12 gap-6 auto-rows-[280px]">
             {/* Large - Santorini */}
-            <Link href={session ? "/plan/new" : "/register"} className="col-span-12 md:col-span-7 row-span-2 group relative overflow-hidden rounded-3xl cursor-pointer">
+            <motion.div
+              className="col-span-12 md:col-span-7 row-span-2"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
               <img
                 src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=1000&h=800&fit=crop&q=80"
                 alt="Santorini Greece"
@@ -486,73 +564,114 @@ export default function Home() {
                 </div>
               </div>
             </Link>
+            </motion.div>
 
             {/* Medium - Tokyo */}
-            <Link href={session ? "/plan/new" : "/register"} className="col-span-12 md:col-span-5 row-span-1 group relative overflow-hidden rounded-3xl cursor-pointer">
-              <img
-                src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop&q=80"
-                alt="Tokyo Japan"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-3xl font-bold text-white mb-2 font-display">Tokyo</h3>
-                <p className="text-white/90 text-sm">Neon-lit streets meet ancient temples</p>
-              </div>
-            </Link>
+            <motion.div
+              className="col-span-12 md:col-span-5 row-span-1"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&h=600&fit=crop&q=80"
+                  alt="Tokyo Japan"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <h3 className="text-3xl font-bold text-white mb-2 font-display">Tokyo</h3>
+                  <p className="text-white/90 text-sm">Neon-lit streets meet ancient temples</p>
+                </div>
+              </Link>
+            </motion.div>
 
             {/* Medium - Bali */}
-            <Link href={session ? "/plan/new" : "/register"} className="col-span-12 md:col-span-5 row-span-1 group relative overflow-hidden rounded-3xl cursor-pointer">
-              <img
-                src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=600&fit=crop&q=80"
-                alt="Bali Indonesia"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-3xl font-bold text-white mb-2 font-display">Bali</h3>
-                <p className="text-white/90 text-sm">Tropical paradise with spiritual soul</p>
-              </div>
-            </Link>
+            <motion.div
+              className="col-span-12 md:col-span-5 row-span-1"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800&h=600&fit=crop&q=80"
+                  alt="Bali Indonesia"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <h3 className="text-3xl font-bold text-white mb-2 font-display">Bali</h3>
+                  <p className="text-white/90 text-sm">Tropical paradise with spiritual soul</p>
+                </div>
+              </Link>
+            </motion.div>
 
             {/* Small - Paris */}
-            <Link href={session ? "/plan/new" : "/register"} className="col-span-6 md:col-span-4 row-span-1 group relative overflow-hidden rounded-3xl cursor-pointer">
-              <img
-                src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&h=500&fit=crop&q=80"
-                alt="Paris France"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-2xl font-bold text-white font-display">Paris</h3>
-              </div>
-            </Link>
+            <motion.div
+              className="col-span-6 md:col-span-4 row-span-1"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&h=500&fit=crop&q=80"
+                  alt="Paris France"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <h3 className="text-2xl font-bold text-white font-display">Paris</h3>
+                </div>
+              </Link>
+            </motion.div>
 
             {/* Small - Maldives */}
-            <Link href={session ? "/plan/new" : "/register"} className="col-span-6 md:col-span-4 row-span-1 group relative overflow-hidden rounded-3xl cursor-pointer">
-              <img
-                src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&h=500&fit=crop&q=80"
-                alt="Maldives"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-2xl font-bold text-white font-display">Maldives</h3>
-              </div>
-            </Link>
+            <motion.div
+              className="col-span-6 md:col-span-4 row-span-1"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=600&h=500&fit=crop&q=80"
+                  alt="Maldives"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <h3 className="text-2xl font-bold text-white font-display">Maldives</h3>
+                </div>
+              </Link>
+            </motion.div>
 
             {/* Small - NYC */}
-            <Link href={session ? "/plan/new" : "/register"} className="col-span-12 md:col-span-4 row-span-1 group relative overflow-hidden rounded-3xl cursor-pointer">
-              <img
-                src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=700&h=500&fit=crop&q=80"
-                alt="New York City"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-              <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-2xl font-bold text-white font-display">New York</h3>
-              </div>
-            </Link>
+            <motion.div
+              className="col-span-12 md:col-span-4 row-span-1"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
+                <img
+                  src="https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=700&h=500&fit=crop&q=80"
+                  alt="New York City"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute inset-0 p-6 flex flex-col justify-end">
+                  <h3 className="text-2xl font-bold text-white font-display">New York</h3>
+                </div>
+              </Link>
+            </motion.div>
           </div>
 
           {/* View All */}
@@ -571,22 +690,40 @@ export default function Home() {
       <section id="features" className="py-32 px-4 sm:px-6 lg:px-8 relative bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-20 items-center mb-20">
-            <div>
-              <div className="inline-block mb-4">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div
+                className="inline-block mb-4"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
                 <span className="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold uppercase tracking-wider">
                   Features
                 </span>
-              </div>
+              </motion.div>
               <h2 className="text-5xl md:text-6xl font-black text-gray-900 mb-6 font-display">
                 Planning that feels like magic
               </h2>
               <p className="text-xl text-gray-600 font-light leading-relaxed">
                 Every detail handled. Every preference honored. Every moment optimized. This is travel planning powered by GPT-4o.
               </p>
-            </div>
+            </motion.div>
 
             {/* Featured Stat Card */}
-            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-10 text-white relative overflow-hidden">
+            <motion.div
+              className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-10 text-white relative overflow-hidden"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+              whileHover={{ scale: 1.02 }}
+            >
               <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-3xl"></div>
               <div className="relative z-10">
                 <div className="text-6xl font-black mb-4">20s</div>
@@ -613,7 +750,14 @@ export default function Home() {
           <div className="space-y-6">
             {/* Row 1 */}
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="group p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-blue-100">
+              <motion.div
+                className="group p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-blue-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                whileHover={{ y: -5 }}
+              >
                 <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
                   <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -621,9 +765,16 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">AI Itineraries</h3>
                 <p className="text-gray-700 leading-relaxed">Comprehensive day-by-day plans with perfect timing and local insights</p>
-              </div>
+              </motion.div>
 
-              <div className="md:col-span-2 group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-purple-100">
+              <motion.div
+                className="md:col-span-2 group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-purple-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                whileHover={{ y: -5 }}
+              >
                 <div className="flex items-start gap-6">
                   <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30">
                     <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -635,12 +786,19 @@ export default function Home() {
                     <p className="text-gray-700 leading-relaxed">Automatic cost breakdowns with visual charts, per-person splits, and daily estimates. Never overspend again.</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
             {/* Row 2 */}
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="group p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-emerald-100">
+              <motion.div
+                className="group p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-emerald-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                whileHover={{ y: -5 }}
+              >
                 <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30">
                   <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
@@ -648,9 +806,16 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Flight Intel</h3>
                 <p className="text-gray-700 leading-relaxed">Curated flight options with layover analysis and booking strategies</p>
-              </div>
+              </motion.div>
 
-              <div className="group p-8 bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-orange-100">
+              <motion.div
+                className="group p-8 bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-orange-100"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                whileHover={{ y: -5 }}
+              >
                 <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-orange-500/30">
                   <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -658,7 +823,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Hotel Picks</h3>
                 <p className="text-gray-700 leading-relaxed">AI-selected stays with location perks and vibe matching</p>
-              </div>
+              </motion.div>
             </div>
 
             {/* Row 3 */}
