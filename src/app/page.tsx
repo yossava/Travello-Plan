@@ -259,8 +259,8 @@ export default function Home() {
                       whileTap={{ scale: 0.95 }}
                     >
                       Explore Destinations
-                    </a>
-                  </div>
+                    </motion.a>
+                  </motion.div>
                 )}
 
                 {/* Trust Indicators */}
