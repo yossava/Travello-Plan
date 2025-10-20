@@ -281,7 +281,7 @@ export default function Home() {
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-6">
                   <motion.h1
-                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-gray-900 leading-[1.1] tracking-tight font-display text-center lg:text-left"
+                    className="text-5xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-8xl font-black text-gray-900 leading-[1.1] tracking-tight font-display text-center lg:text-left"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}

@@ -1,21 +1,14 @@
 import type { Metadata } from 'next';
-import { Poppins, Nunito } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/components/providers/SessionProvider';
 import { Toaster } from 'react-hot-toast';
 
-const nunito = Nunito({
+const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-nunito',
+  variable: '--font-inter',
   display: 'swap',
-  weight: ['300', '400', '600', '700', '800', '900'],
-});
-
-const poppins = Poppins({
-  subsets: ['latin'],
-  variable: '--font-poppins',
-  display: 'swap',
-  weight: ['400', '500', '600', '700', '800', '900'],
+  weight: ['300', '400', '500', '600', '700', '800', '900'],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="overflow-x-hidden">
-      <body className={`${nunito.variable} ${poppins.variable} font-sans antialiased overflow-x-hidden`}>
+      <body className={`${inter.variable} font-sans antialiased overflow-x-hidden`}>
         <SessionProvider>
           {children}
           <Toaster position="top-right" />
