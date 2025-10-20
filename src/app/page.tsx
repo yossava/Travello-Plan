@@ -876,112 +876,115 @@ export default function Home() {
             </motion.div>
           </div>
 
-          {/* Feature Cards - Asymmetric */}
-          <div className="space-y-6">
-            {/* Row 1 */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <motion.div
-                className="group p-8 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-blue-100"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-blue-500/30">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">AI Itineraries</h3>
-                <p className="text-gray-700 leading-relaxed">Comprehensive day-by-day plans with perfect timing and local insights</p>
-              </motion.div>
-
-              <motion.div
-                className="md:col-span-2 group p-8 bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-purple-100"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-purple-500/30">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Smart Budgeting</h3>
-                    <p className="text-gray-700 leading-relaxed">Automatic cost breakdowns with visual charts, per-person splits, and daily estimates. Never overspend again.</p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Row 2 */}
-            <div className="grid md:grid-cols-2 gap-6">
-              <motion.div
-                className="group p-8 bg-gradient-to-br from-emerald-50 to-teal-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-emerald-100"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/30">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Flight Intel</h3>
-                <p className="text-gray-700 leading-relaxed">Curated flight options with layover analysis and booking strategies</p>
-              </motion.div>
-
-              <motion.div
-                className="group p-8 bg-gradient-to-br from-orange-50 to-red-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-orange-100"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-orange-500/30">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Hotel Picks</h3>
-                <p className="text-gray-700 leading-relaxed">AI-selected stays with location perks and vibe matching</p>
-              </motion.div>
-            </div>
-
-            {/* Row 3 */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="md:col-span-2 group p-8 bg-gradient-to-br from-indigo-50 to-blue-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-indigo-100">
-                <div className="flex items-start gap-6">
-                  <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg shadow-indigo-500/30">
-                    <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Beautiful PDFs</h3>
-                    <p className="text-gray-700 leading-relaxed">Download professionally designed guides with all your plans, contacts, and tips for offline access</p>
-                  </div>
-                </div>
+          {/* Feature Cards - Clean Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* AI Itineraries */}
+            <motion.div
+              className="group p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              whileHover={{ y: -4 }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
               </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">AI Itineraries</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Comprehensive day-by-day plans with perfect timing and local insights</p>
+            </motion.div>
 
-              <div className="group p-8 bg-gradient-to-br from-rose-50 to-pink-50 rounded-3xl hover:shadow-2xl transition-all duration-500 border border-rose-100">
-                <div className="w-14 h-14 bg-gradient-to-br from-rose-500 to-pink-500 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-rose-500/30">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3 font-display">Real-Time</h3>
-                <p className="text-gray-700 leading-relaxed">Timing down to the minute</p>
+            {/* Smart Budgeting */}
+            <motion.div
+              className="group p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              whileHover={{ y: -4 }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
               </div>
-            </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Smart Budgeting</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Automatic cost breakdowns with visual charts, per-person splits, and daily estimates. Never overspend again.</p>
+            </motion.div>
+
+            {/* Flight Intel */}
+            <motion.div
+              className="group p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              whileHover={{ y: -4 }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Flight Intel</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Curated flight options with layover analysis and booking strategies</p>
+            </motion.div>
+
+            {/* Hotel Picks */}
+            <motion.div
+              className="group p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              whileHover={{ y: -4 }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Hotel Picks</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">AI-selected stays with location perks and vibe matching</p>
+            </motion.div>
+
+            {/* Beautiful PDFs */}
+            <motion.div
+              className="group p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              whileHover={{ y: -4 }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-blue-500 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Beautiful PDFs</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Download professionally designed guides with all your plans, contacts, and tips for offline access</p>
+            </motion.div>
+
+            {/* Real-Time */}
+            <motion.div
+              className="group p-8 bg-white rounded-2xl hover:shadow-xl transition-all duration-300 border border-gray-100"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              whileHover={{ y: -4 }}
+            >
+              <div className="w-16 h-16 bg-gradient-to-br from-rose-500 to-pink-500 rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Real-Time Updates</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">Timing down to the minute with live schedule adjustments</p>
+            </motion.div>
           </div>
         </div>
       </section>
