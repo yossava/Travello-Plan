@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import AppLayout from '@/components/layout/AppLayout';
-import PageHeader from '@/components/layout/PageHeader';
 import Spinner from '@/components/ui/Spinner';
 import PlanCard from '@/components/dashboard/PlanCard';
 import EmptyState from '@/components/dashboard/EmptyState';

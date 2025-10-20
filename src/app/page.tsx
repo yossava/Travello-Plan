@@ -189,7 +189,7 @@ export default function Home() {
                     { number: '10K+', label: 'Trips Planned', gradient: 'from-blue-600 to-cyan-500', borderColor: 'border-blue-500/20', hoverBorder: 'hover:border-blue-500/40', bgGradient: 'from-blue-500/20 to-cyan-500/20', delay: 0 },
                     { number: '150+', label: 'Countries', gradient: 'from-purple-600 to-pink-500', borderColor: 'border-purple-500/20', hoverBorder: 'hover:border-purple-500/40', bgGradient: 'from-purple-500/20 to-pink-500/20', delay: 0.1 },
                     { number: '4.9', label: 'User Rating', gradient: 'from-amber-500 to-orange-500', borderColor: 'border-amber-500/20', hoverBorder: 'hover:border-amber-500/40', bgGradient: 'from-amber-500/20 to-orange-500/20', delay: 0.2, star: true }
-                  ].map((stat, index) => (
+                  ].map((stat) => (
                     <motion.div
                       key={stat.label}
                       className="relative group"
@@ -743,7 +743,7 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Feature Cards - Asymmetric */}
@@ -906,7 +906,7 @@ export default function Home() {
               href="/register"
               className="inline-flex items-center px-10 py-5 bg-white text-gray-900 rounded-2xl font-bold text-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl"
             >
-              Try It Now — It's Free
+              Try It Now — It&apos;s Free
               <svg className="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -1113,7 +1113,7 @@ export default function Home() {
             {/* What's Missing Tease */}
             <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border border-slate-600/30 rounded-xl p-5">
               <h3 className="text-sm font-bold text-white mb-3">
-                What you'll get in the full itinerary:
+                What you&apos;ll get in the full itinerary:
               </h3>
               <div className="grid grid-cols-2 gap-3 text-xs">
                 {[
