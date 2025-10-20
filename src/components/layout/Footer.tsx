@@ -15,7 +15,7 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span className="text-xl font-bold text-white">TravelAI</span>
+              <span className="text-xl font-bold text-white">AiTravello</span>
             </div>
             <p className="text-sm text-gray-400">
               AI-powered travel planning made simple. Create personalized itineraries in minutes.
@@ -58,14 +58,14 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
+                <Link href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm text-gray-400 hover:text-white transition-colors">
+                <Link href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">
                   Terms of Service
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -73,11 +73,21 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="mt-8 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-400">
-              &copy; {currentYear} TravelAI. All rights reserved.
-            </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col md:flex-row items-center gap-4">
+              <p className="text-sm text-gray-400">
+                &copy; {currentYear} AiTravello. All rights reserved.
+              </p>
+              <div className="flex space-x-4">
+                <Link href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Privacy
+                </Link>
+                <Link href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">
+                  Terms
+                </Link>
+              </div>
+            </div>
+            <div className="flex space-x-6">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <span className="sr-only">Twitter</span>
                 <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">

@@ -74,7 +74,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <span className="text-2xl font-bold text-gray-900 font-display">TravelAI</span>
+              <span className="text-2xl font-bold text-gray-900 font-display">AiTravello</span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
               <a href="#destinations" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
@@ -382,6 +382,7 @@ export default function Home() {
                         options={COUNTRIES.map((country) => ({ value: country, label: country }))}
                         placeholder="Search countries..."
                         required
+                        dark={true}
                       />
                     </div>
 
@@ -927,7 +928,7 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
-                <span className="text-3xl font-black font-display">TravelAI</span>
+                <span className="text-3xl font-black font-display">AiTravello</span>
               </div>
               <p className="text-gray-400 max-w-sm text-lg font-light leading-relaxed">
                 The future of travel planning. Powered by GPT-4o to create extraordinary journeys.
@@ -966,10 +967,10 @@ export default function Home() {
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm">&copy; 2024 TravelAI. All rights reserved.</p>
+            <p className="text-gray-500 text-sm">&copy; 2024 AiTravello. All rights reserved.</p>
             <div className="flex gap-6 text-sm text-gray-500">
-              <a href="#" className="hover:text-white transition-colors">Privacy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms</a>
+              <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
             </div>
           </div>
         </div>
