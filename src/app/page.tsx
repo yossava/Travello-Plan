@@ -1,15 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-import { motion } from 'framer-motion';
-import Modal from '@/components/ui/Modal';
 import Button from '@/components/ui/Button';
+import Modal from '@/components/ui/Modal';
 import SearchableSelect from '@/components/ui/SearchableSelect';
 import { COUNTRIES } from '@/types/plan';
+import { motion } from 'framer-motion';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 export default function Home() {
   const { data: session } = useSession();
@@ -496,7 +496,7 @@ export default function Home() {
                     Try It Now
                   </h3>
                   <p className="text-gray-300 text-lg">
-                    Get a taste of AI-powered planning — no signup required
+                    Get a taste of AI-powered planning, no signup required
                   </p>
                 </div>
 
@@ -570,11 +570,10 @@ export default function Home() {
                               : [...teaserData.interests, interest.value];
                             setTeaserData({ ...teaserData, interests });
                           }}
-                          className={`flex flex-col items-center justify-center px-4 py-4 rounded-xl border-2 transition-all ${
-                            teaserData.interests.includes(interest.value)
-                              ? 'bg-white/20 border-white/40 scale-105 shadow-lg shadow-white/10'
-                              : 'bg-white/5 border-white/20 hover:border-white/30 hover:bg-white/10'
-                          }`}
+                          className={`flex flex-col items-center justify-center px-4 py-4 rounded-xl border-2 transition-all ${teaserData.interests.includes(interest.value)
+                            ? 'bg-white/20 border-white/40 scale-105 shadow-lg shadow-white/10'
+                            : 'bg-white/5 border-white/20 hover:border-white/30 hover:bg-white/10'
+                            }`}
                         >
                           <span className="text-3xl mb-2">{interest.icon}</span>
                           <span className="text-xs text-white font-medium">{interest.label}</span>
@@ -651,7 +650,7 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              From hidden gems to iconic landmarks — AI-curated experiences for every type of traveler
+              From hidden gems to iconic landmarks, AI-curated experiences for every type of traveler
             </motion.p>
           </motion.div>
 
@@ -666,34 +665,34 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <Link href={session ? "/plan/new" : "/register"} className="block h-full group relative overflow-hidden rounded-3xl cursor-pointer">
-              <img
-                src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=1000&h=800&fit=crop&q=80"
-                alt="Santorini Greece"
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
-              <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
-                <div className="flex justify-between items-start">
-                  <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                    <span className="text-white text-sm font-semibold">Most Popular</span>
+                <img
+                  src="https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=1000&h=800&fit=crop&q=80"
+                  alt="Santorini Greece"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors"></div>
+                <div className="absolute inset-0 p-8 md:p-12 flex flex-col justify-between">
+                  <div className="flex justify-between items-start">
+                    <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
+                      <span className="text-white text-sm font-semibold">Most Popular</span>
+                    </div>
+                    <div className="bg-white/20 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center transform group-hover:rotate-45 transition-transform">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                      </svg>
+                    </div>
                   </div>
-                  <div className="bg-white/20 backdrop-blur-sm w-12 h-12 rounded-full flex items-center justify-center transform group-hover:rotate-45 transition-transform">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                  <div className="space-y-3">
+                    <h3 className="text-4xl md:text-5xl font-bold text-white font-display">Santorini</h3>
+                    <p className="text-white/90 text-lg max-w-md">Whitewashed villages perched on volcanic cliffs overlooking the Aegean Sea</p>
+                    <div className="flex gap-2 flex-wrap">
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">Romantic</span>
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">Luxury</span>
+                      <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">Photography</span>
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-3">
-                  <h3 className="text-4xl md:text-5xl font-bold text-white font-display">Santorini</h3>
-                  <p className="text-white/90 text-lg max-w-md">Whitewashed villages perched on volcanic cliffs overlooking the Aegean Sea</p>
-                  <div className="flex gap-2 flex-wrap">
-                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">Romantic</span>
-                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">Luxury</span>
-                    <span className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm">Photography</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
+              </Link>
             </motion.div>
 
             {/* Medium - Tokyo */}
@@ -1012,7 +1011,7 @@ export default function Home() {
       <section id="how-it-works" className="py-32 px-4 sm:px-6 lg:px-8 relative bg-gray-900 text-white overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px'}}></div>
+          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
         </div>
 
         <div className="max-w-6xl mx-auto relative z-10">
@@ -1058,7 +1057,7 @@ export default function Home() {
               href="/register"
               className="inline-flex items-center px-10 py-5 bg-white text-gray-900 rounded-2xl font-bold text-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl"
             >
-              Try It Now — It&apos;s Free
+              Try It Now! It&apos;s Free
               <svg className="w-6 h-6 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
@@ -1107,10 +1106,10 @@ export default function Home() {
                 <h4 className="text-white font-bold mb-4 text-sm uppercase tracking-wider">Connect</h4>
                 <div className="flex gap-3">
                   <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
                   </a>
                   <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" /></svg>
                   </a>
                 </div>
               </div>
