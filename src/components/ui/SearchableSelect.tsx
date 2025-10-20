@@ -28,25 +28,24 @@ export default function SearchableSelect({
 }: SearchableSelectProps) {
   const selectedOption = options.find((opt) => opt.value === value) || null;
 
-  // Custom styles to match the dark theme and Input component
+  // Custom styles to match the light theme and Input component
   const customStyles: StylesConfig<Option, false> = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: 'rgba(255, 255, 255, 0.05)', // bg-white/5
-      backdropFilter: 'blur(8px)', // backdrop-blur-sm
+      backgroundColor: 'rgb(249 250 251)', // bg-gray-50
       borderColor: error
-        ? 'rgb(248 113 113)' // red-400
+        ? 'rgb(252 165 165)' // red-300
         : state.isFocused
-          ? 'rgb(168 85 247)' // purple-500
-          : 'rgba(255, 255, 255, 0.2)', // border-white/20
+          ? 'rgb(59 130 246)' // blue-500
+          : 'rgb(229 231 235)', // border-gray-200
       borderWidth: '2px',
       borderRadius: '0.75rem',
       padding: '0.375rem 0.5rem',
       minHeight: '3rem',
-      boxShadow: state.isFocused ? '0 0 0 4px rgba(168, 85, 247, 0.5)' : 'none',
+      boxShadow: state.isFocused ? '0 0 0 4px rgba(59, 130, 246, 0.2)' : 'none',
       transition: 'all 0.2s',
       '&:hover': {
-        borderColor: error ? 'rgb(248 113 113)' : 'rgba(255, 255, 255, 0.3)',
+        borderColor: error ? 'rgb(252 165 165)' : 'rgb(209 213 219)', // gray-300
       },
     }),
     valueContainer: (provided) => ({
@@ -55,26 +54,25 @@ export default function SearchableSelect({
     }),
     input: (provided) => ({
       ...provided,
-      color: 'rgb(255 255 255)',
+      color: 'rgb(17 24 39)', // gray-900
       margin: '0',
       padding: '0',
     }),
     placeholder: (provided) => ({
       ...provided,
-      color: 'rgb(148 163 184)', // slate-400
+      color: 'rgb(156 163 175)', // gray-400
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: 'rgb(255 255 255)',
+      color: 'rgb(17 24 39)', // gray-900
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: 'rgb(51 65 85)', // slate-700 - solid background
-      backdropFilter: 'blur(8px)', // backdrop-blur-sm
+      backgroundColor: 'rgb(255 255 255)', // white - solid background
       borderRadius: '0.75rem',
-      border: '2px solid rgba(255, 255, 255, 0.2)', // border-white/20
+      border: '2px solid rgb(229 231 235)', // border-gray-200
       marginTop: '0.5rem',
-      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)',
+      boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05)',
       zIndex: 9999,
     }),
     menuList: (provided) => ({
@@ -85,16 +83,16 @@ export default function SearchableSelect({
     option: (provided, state) => ({
       ...provided,
       backgroundColor: state.isSelected
-        ? 'rgb(168 85 247)' // purple-500
+        ? 'rgb(59 130 246)' // blue-500
         : state.isFocused
-          ? 'rgba(255, 255, 255, 0.1)' // white/10 for hover
+          ? 'rgb(239 246 255)' // blue-50
           : 'transparent',
-      color: 'rgb(255 255 255)',
+      color: state.isSelected ? 'rgb(255 255 255)' : 'rgb(17 24 39)', // white : gray-900
       padding: '0.75rem 1rem',
       borderRadius: '0.5rem',
       cursor: 'pointer',
       '&:active': {
-        backgroundColor: 'rgb(147 51 234)', // purple-600
+        backgroundColor: 'rgb(37 99 235)', // blue-600
       },
     }),
     indicatorSeparator: () => ({
@@ -102,15 +100,15 @@ export default function SearchableSelect({
     }),
     dropdownIndicator: (provided, state) => ({
       ...provided,
-      color: state.isFocused ? 'rgb(168 85 247)' : 'rgb(148 163 184)',
+      color: state.isFocused ? 'rgb(59 130 246)' : 'rgb(156 163 175)', // blue-500 : gray-400
       '&:hover': {
-        color: 'rgb(168 85 247)',
+        color: 'rgb(59 130 246)',
       },
       padding: '0 0.5rem',
     }),
     clearIndicator: (provided) => ({
       ...provided,
-      color: 'rgb(148 163 184)',
+      color: 'rgb(156 163 175)', // gray-400
       '&:hover': {
         color: 'rgb(239 68 68)', // red-500
       },
@@ -120,9 +118,9 @@ export default function SearchableSelect({
 
   return (
     <div className="space-y-2">
-      <label htmlFor={id} className="block text-sm font-semibold text-white mb-2">
+      <label htmlFor={id} className="block text-sm font-semibold text-gray-700 mb-2">
         {label}
-        {required && <span className="text-red-400 ml-1">*</span>}
+        {required && <span className="text-red-500 ml-1">*</span>}
       </label>
       <Select
         instanceId={id}
@@ -137,7 +135,7 @@ export default function SearchableSelect({
         className="react-select-container"
         classNamePrefix="react-select"
       />
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 }

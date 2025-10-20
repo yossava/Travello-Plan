@@ -105,7 +105,7 @@ export default function ProfilePage() {
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-gray-200 mb-2"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
                 >
                   Full Name
                 </label>
@@ -121,7 +121,7 @@ export default function ProfilePage() {
                     id="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
               </div>
@@ -129,7 +129,7 @@ export default function ProfilePage() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-semibold text-gray-200 mb-2"
+                  className="block text-sm font-semibold text-gray-700 mb-2"
                 >
                   Email
                 </label>
@@ -145,20 +145,20 @@ export default function ProfilePage() {
                     id="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                    className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                   />
                 </div>
               </div>
 
-              <div className="border-t border-white/10 pt-6">
-                <h3 className="text-lg font-bold text-white mb-4">
+              <div className="border-t border-gray-200 pt-6">
+                <h3 className="text-lg font-bold text-gray-900 mb-4 font-display">
                   Change Password
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <label
                       htmlFor="currentPassword"
-                      className="block text-sm font-semibold text-gray-200 mb-2"
+                      className="block text-sm font-semibold text-gray-700 mb-2"
                     >
                       Current Password
                     </label>
@@ -174,7 +174,7 @@ export default function ProfilePage() {
                         id="currentPassword"
                         value={formData.currentPassword}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                     </div>
                   </div>
@@ -182,7 +182,7 @@ export default function ProfilePage() {
                   <div>
                     <label
                       htmlFor="newPassword"
-                      className="block text-sm font-semibold text-gray-200 mb-2"
+                      className="block text-sm font-semibold text-gray-700 mb-2"
                     >
                       New Password
                     </label>
@@ -198,7 +198,7 @@ export default function ProfilePage() {
                         id="newPassword"
                         value={formData.newPassword}
                         onChange={handleChange}
-                        className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                        className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                       />
                     </div>
                   </div>
@@ -218,21 +218,21 @@ export default function ProfilePage() {
             </form>
           </Card>
 
-          <Card className="mt-6">
-            <div className="p-6">
+          <Card className="mt-6 border-red-200">
+            <div className="p-6 bg-red-50">
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
-                  <div className="w-12 h-12 rounded-xl bg-red-500/20 flex items-center justify-center">
-                    <svg className="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div className="w-12 h-12 rounded-xl bg-red-100 flex items-center justify-center">
+                    <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-bold text-red-400 mb-2">
+                  <h3 className="text-lg font-bold text-red-900 mb-2 font-display">
                     Danger Zone
                   </h3>
-                  <p className="text-sm text-gray-300 mb-4">
+                  <p className="text-sm text-red-700 mb-4">
                     Once you delete your account, there is no going back. Please be certain.
                   </p>
                   <Button

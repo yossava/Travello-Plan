@@ -29,7 +29,7 @@ export default function Button({
     secondary: 'bg-gray-100 text-gray-900 hover:bg-gray-200 hover:shadow-md focus:ring-gray-500/50 active:scale-95',
     outline: 'bg-transparent border-2 border-primary-600 text-primary-600 hover:bg-primary-50 hover:shadow-md focus:ring-primary-500/50 active:scale-95',
     ghost: 'bg-transparent text-gray-700 hover:bg-gray-100 hover:shadow-sm focus:ring-gray-500/50 active:scale-95',
-    gradient: 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-lg hover:shadow-purple-500/50 hover:scale-105 focus:ring-purple-500/50',
+    gradient: 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:shadow-lg hover:shadow-blue-500/40 hover:scale-105 focus:ring-blue-500/50',
     danger: 'bg-red-600 text-white hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/30 focus:ring-red-500/50 active:scale-95',
   };
 

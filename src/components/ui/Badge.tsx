@@ -12,11 +12,11 @@ export default function Badge({
   className = '',
 }: BadgeProps) {
   const variantStyles = {
-    success: 'bg-green-500/20 text-green-300 border border-green-500/30',
-    warning: 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/30',
-    error: 'bg-red-500/20 text-red-300 border border-red-500/30',
-    info: 'bg-blue-500/20 text-blue-300 border border-blue-500/30',
-    default: 'bg-gray-500/20 text-gray-300 border border-gray-500/30',
+    success: 'bg-green-100 text-green-700 border border-green-200',
+    warning: 'bg-yellow-100 text-yellow-700 border border-yellow-200',
+    error: 'bg-red-100 text-red-700 border border-red-200',
+    info: 'bg-blue-100 text-blue-700 border border-blue-200',
+    default: 'bg-gray-100 text-gray-700 border border-gray-200',
   };
 
   return (

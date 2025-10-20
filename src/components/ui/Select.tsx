@@ -18,16 +18,17 @@ export default function Select({
       {label && (
         <label
           htmlFor={props.id}
-          className="block text-sm font-semibold text-white mb-2"
+          className="block text-sm font-semibold text-gray-700 mb-2"
         >
           {label}
+          {props.required && <span className="text-red-500 ml-1">*</span>}
         </label>
       )}
       <select
-        className={`block w-full px-4 py-3 border-2 rounded-xl bg-white/5 backdrop-blur-sm text-white shadow-sm focus:outline-none focus:ring-4 transition-all duration-200 ${
+        className={`block w-full px-4 py-3 border-2 rounded-xl bg-gray-50 text-gray-900 shadow-sm focus:outline-none focus:ring-4 transition-all duration-200 ${
           error
-            ? 'border-red-400 focus:ring-red-500/50 focus:border-red-500'
-            : 'border-white/20 focus:ring-purple-500/50 focus:border-purple-500 hover:border-white/30'
+            ? 'border-red-300 focus:ring-red-500/20 focus:border-red-500'
+            : 'border-gray-200 focus:ring-blue-500/20 focus:border-blue-500 hover:border-gray-300'
         } ${className}`}
         {...props}
       >
@@ -39,7 +40,7 @@ export default function Select({
         ))}
       </select>
       {error && (
-        <p className="mt-2 text-sm text-red-400 flex items-center">
+        <p className="mt-2 text-sm text-red-600 flex items-center">
           <svg
             className="w-4 h-4 mr-1"
             fill="currentColor"

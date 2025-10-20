@@ -1,10 +1,22 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Poppins, Nunito } from 'next/font/google';
 import './globals.css';
 import SessionProvider from '@/components/providers/SessionProvider';
 import { Toaster } from 'react-hot-toast';
 
-const inter = Inter({ subsets: ['latin'] });
+const nunito = Nunito({
+  subsets: ['latin'],
+  variable: '--font-nunito',
+  display: 'swap',
+  weight: ['300', '400', '600', '700', '800', '900'],
+});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  variable: '--font-poppins',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
 
 export const metadata: Metadata = {
   title: 'Travel Planner - Plan Your Perfect Trip',
@@ -19,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`${nunito.variable} ${poppins.variable} font-sans antialiased`}>
         <SessionProvider>
           {children}
           <Toaster position="top-right" />

@@ -8,6 +8,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-nunito)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
+      },
       colors: {
         primary: {
           50: '#eff6ff',

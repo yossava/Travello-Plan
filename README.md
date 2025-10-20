@@ -298,7 +298,3 @@ MIT License - feel free to use this project as a template for your own applicati
 - AI powered by [OpenAI](https://openai.com/)
 - UI components styled with [Tailwind CSS](https://tailwindcss.com/)
 - Database managed by [Prisma](https://www.prisma.io/)
-
----
-
-**Built with Claude Code** - An AI-powered development assistant by Anthropic

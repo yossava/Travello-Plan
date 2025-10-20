@@ -80,17 +80,17 @@ export default function Step1BasicDetails({
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">
+        <h2 className="text-2xl font-bold text-gray-900 mb-2 font-display">
           Basic Trip Details
         </h2>
-        <p className="text-base text-gray-300">
+        <p className="text-base text-gray-600">
           Tell us about your travel plans
         </p>
       </div>
 
       {/* Origin */}
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Origin</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Origin</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <SearchableSelect
             id="originCountry"
@@ -125,7 +125,7 @@ export default function Step1BasicDetails({
 
       {/* Destination */}
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Destination</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Destination</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <SearchableSelect
             id="destCountry"
@@ -148,9 +148,9 @@ export default function Step1BasicDetails({
           <div>
             <label
               htmlFor="destCity"
-              className="block text-sm font-medium text-gray-200 mb-2"
+              className="block text-sm font-medium text-gray-700 mb-2"
             >
-              City <span className="text-red-400">*</span>
+              City <span className="text-red-500">*</span>
             </label>
             <div className="flex gap-2">
               <div className="flex-1">
@@ -174,7 +174,7 @@ export default function Step1BasicDetails({
                 onClick={handleGetCitySuggestions}
                 disabled={!formData.destination.country || loadingSuggestions}
                 loading={loadingSuggestions}
-                className="whitespace-nowrap bg-white/10 hover:bg-white/20 text-white border-2 border-white/30 hover:border-white/50"
+                className="whitespace-nowrap"
               >
                 <svg
                   className="w-4 h-4"
@@ -203,7 +203,7 @@ export default function Step1BasicDetails({
         title={`Popular Cities in ${formData.destination.country}`}
       >
         <div className="space-y-2">
-          <p className="text-sm text-gray-400 mb-4">
+          <p className="text-sm text-gray-600 mb-4">
             Select a city or close this dialog to enter your own
           </p>
           <div className="grid grid-cols-1 gap-3">
@@ -211,12 +211,12 @@ export default function Step1BasicDetails({
               <button
                 key={city.name}
                 onClick={() => handleSelectCity(city.name)}
-                className="text-left px-4 py-4 bg-white/5 hover:bg-white/10 rounded-lg transition-all duration-200 border border-white/10 hover:border-primary-500 hover:shadow-lg group"
+                className="text-left px-4 py-4 bg-gray-50 hover:bg-blue-50 rounded-lg transition-all duration-200 border border-gray-200 hover:border-blue-400 hover:shadow-md group"
               >
                 <div className="flex items-start gap-3">
                   <div className="flex-shrink-0 mt-0.5">
                     <svg
-                      className="w-5 h-5 text-primary-400 group-hover:text-primary-300"
+                      className="w-5 h-5 text-blue-500 group-hover:text-blue-600"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -236,16 +236,16 @@ export default function Step1BasicDetails({
                     </svg>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-white mb-1 group-hover:text-primary-300 transition-colors">
+                    <div className="font-semibold text-gray-900 mb-1 group-hover:text-blue-600 transition-colors">
                       {city.name}
                     </div>
-                    <div className="text-sm text-gray-400 leading-relaxed">
+                    <div className="text-sm text-gray-600 leading-relaxed">
                       {city.description}
                     </div>
                   </div>
                   <div className="flex-shrink-0">
                     <svg
-                      className="w-5 h-5 text-gray-500 group-hover:text-primary-400 transition-colors"
+                      className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -267,7 +267,7 @@ export default function Step1BasicDetails({
 
       {/* Dates */}
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
           Travel Dates
         </h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -294,11 +294,11 @@ export default function Step1BasicDetails({
         </div>
         {calculateDuration() > 0 && (
           <div className="mt-3 flex items-center">
-            <div className="inline-flex items-center px-4 py-2 bg-purple-500/20 border border-purple-500/30 rounded-xl">
-              <svg className="w-5 h-5 text-purple-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="inline-flex items-center px-4 py-2 bg-blue-50 border border-blue-200 rounded-xl">
+              <svg className="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-sm font-semibold text-purple-300">
+              <span className="text-sm font-semibold text-blue-700">
                 Duration: {calculateDuration()} days
               </span>
             </div>
@@ -308,7 +308,7 @@ export default function Step1BasicDetails({
 
       {/* Travelers */}
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Travelers</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Travelers</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Input
             id="adults"
@@ -359,7 +359,7 @@ export default function Step1BasicDetails({
 
       {/* Budget */}
       <div>
-        <h3 className="text-lg font-semibold text-white mb-4">Budget</h3>
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">Budget</h3>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Select
             id="currency"

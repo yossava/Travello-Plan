@@ -87,31 +87,31 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-200/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Logo/Brand */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center space-x-3 group">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
               <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <span className="text-2xl font-bold text-white">TravelAI</span>
+            <span className="text-2xl font-bold text-gray-900 font-display">TravelAI</span>
           </Link>
         </div>
 
         {/* Register Card */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl p-8">
+        <div className="bg-white border border-gray-200 rounded-3xl shadow-xl p-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Create Account</h1>
-            <p className="text-gray-300">Start planning your dream trips today</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2 font-display">Create Account</h1>
+            <p className="text-gray-600">Start planning your dream trips today</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -127,7 +127,7 @@ export default function RegisterPage() {
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-gray-200 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Full Name
               </label>
               <div className="relative">
@@ -144,13 +144,13 @@ export default function RegisterPage() {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="John Doe"
-                  className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-200 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email Address
               </label>
               <div className="relative">
@@ -168,13 +168,13 @@ export default function RegisterPage() {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="you@example.com"
-                  className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-200 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Password
               </label>
               <div className="relative">
@@ -192,13 +192,13 @@ export default function RegisterPage() {
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="Min 8 chars, uppercase, lowercase, number"
-                  className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-200 mb-2">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Confirm Password
               </label>
               <div className="relative">
@@ -216,7 +216,7 @@ export default function RegisterPage() {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Re-enter your password"
-                  className="w-full pl-12 pr-4 py-3 bg-white/5 border-2 border-white/10 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-purple-500/50 focus:border-purple-500 transition-all"
+                  className="w-full pl-12 pr-4 py-3 bg-gray-50 border-2 border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
                 />
               </div>
             </div>
@@ -230,14 +230,14 @@ export default function RegisterPage() {
                   required
                   checked={formData.acceptTerms}
                   onChange={handleChange}
-                  className="w-5 h-5 rounded border-2 border-white/20 bg-white/5 text-purple-500 focus:ring-4 focus:ring-purple-500/50 focus:ring-offset-0 transition-all cursor-pointer"
+                  className="w-5 h-5 rounded border-2 border-gray-300 bg-gray-50 text-blue-600 focus:ring-4 focus:ring-blue-500/20 focus:ring-offset-0 transition-all cursor-pointer"
                 />
               </div>
-              <label htmlFor="acceptTerms" className="ml-3 text-sm text-gray-300">
+              <label htmlFor="acceptTerms" className="ml-3 text-sm text-gray-600">
                 I accept the{' '}
                 <a
                   href="#"
-                  className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-300 hover:to-pink-300 transition-all"
+                  className="font-semibold text-blue-600 hover:text-blue-700 transition-all"
                 >
                   terms and conditions
                 </a>
@@ -256,11 +256,11 @@ export default function RegisterPage() {
           </form>
 
           <div className="mt-8 text-center">
-            <p className="text-gray-300">
+            <p className="text-gray-600">
               Already have an account?{' '}
               <Link
                 href="/login"
-                className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-300 hover:to-pink-300 transition-all"
+                className="font-semibold text-blue-600 hover:text-blue-700 transition-all"
               >
                 Sign in
               </Link>
@@ -272,7 +272,7 @@ export default function RegisterPage() {
         <div className="mt-6 text-center">
           <Link
             href="/"
-            className="inline-flex items-center text-gray-300 hover:text-white transition-colors"
+            className="inline-flex items-center text-gray-600 hover:text-gray-900 transition-colors font-medium"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

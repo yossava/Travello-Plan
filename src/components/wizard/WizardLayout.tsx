@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from '@/components/ui/Button';
 
 interface WizardLayoutProps {
@@ -26,18 +27,23 @@ export default function WizardLayout({
   nextLabel = 'Next',
   showSaveDraft = false,
 }: WizardLayoutProps) {
+  const router = useRouter();
   const steps = [
     { number: 1, name: 'Trip Details' },
     { number: 2, name: 'Preferences' },
     { number: 3, name: 'Review' },
   ];
 
+  const handleCancel = () => {
+    router.push('/dashboard');
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 py-8 relative">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 py-8 relative">
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-purple-200/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -56,10 +62,10 @@ export default function WizardLayout({
                     <div
                       className={`flex items-center justify-center w-12 h-12 rounded-xl border-2 transition-all duration-300 ${
                         step.number < currentStep
-                          ? 'border-purple-500 bg-gradient-to-br from-purple-500 to-pink-500 shadow-lg shadow-purple-500/50'
+                          ? 'border-blue-500 bg-gradient-to-br from-blue-600 to-cyan-500 shadow-lg shadow-blue-500/30'
                           : step.number === currentStep
-                          ? 'border-purple-500 bg-white/10 backdrop-blur-xl shadow-lg shadow-purple-500/30'
-                          : 'border-white/20 bg-white/5 backdrop-blur-xl'
+                          ? 'border-blue-500 bg-white shadow-lg'
+                          : 'border-gray-300 bg-white'
                       }`}
                     >
                       {step.number < currentStep ? (
@@ -78,7 +84,7 @@ export default function WizardLayout({
                         <span
                           className={`text-sm font-bold ${
                             step.number === currentStep
-                              ? 'text-purple-300'
+                              ? 'text-blue-600'
                               : 'text-gray-400'
                           }`}
                         >
@@ -89,10 +95,10 @@ export default function WizardLayout({
                     <span
                       className={`ml-3 text-sm font-semibold whitespace-nowrap ${
                         step.number === currentStep
-                          ? 'text-purple-300'
+                          ? 'text-blue-600'
                           : step.number < currentStep
-                          ? 'text-white'
-                          : 'text-gray-400'
+                          ? 'text-gray-900'
+                          : 'text-gray-500'
                       }`}
                     >
                       {step.name}
@@ -102,8 +108,8 @@ export default function WizardLayout({
                     <div
                       className={`flex-1 h-0.5 mx-6 transition-all duration-300 ${
                         step.number < currentStep
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500'
-                          : 'bg-white/20'
+                          ? 'bg-gradient-to-r from-blue-600 to-cyan-500'
+                          : 'bg-gray-300'
                       }`}
                     />
                   )}
@@ -114,14 +120,14 @@ export default function WizardLayout({
         </nav>
 
         {/* Content */}
-        <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl p-8 mb-6">
+        <div className="bg-white border border-gray-200 shadow-xl rounded-3xl p-8 mb-6">
           {children}
         </div>
 
         {/* Navigation Buttons */}
         <div className="flex justify-between items-center">
           <div>
-            {currentStep > 1 && (
+            {currentStep > 1 ? (
               <Button
                 variant="secondary"
                 onClick={onBack}
@@ -132,6 +138,18 @@ export default function WizardLayout({
                 }
               >
                 Back
+              </Button>
+            ) : (
+              <Button
+                variant="secondary"
+                onClick={handleCancel}
+                leftIcon={
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                  </svg>
+                }
+              >
+                Back to Dashboard
               </Button>
             )}
           </div>
