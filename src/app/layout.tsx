@@ -30,8 +30,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${nunito.variable} ${poppins.variable} font-sans antialiased`}>
+    <html lang="en" className="overflow-x-hidden">
+      <body className={`${nunito.variable} ${poppins.variable} font-sans antialiased overflow-x-hidden`}>
         <SessionProvider>
           {children}
           <Toaster position="top-right" />

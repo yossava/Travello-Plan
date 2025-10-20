@@ -60,19 +60,19 @@ export default function BudgetSection({
           <h3 className="text-lg font-medium opacity-90 mb-2">
             Total Trip Cost
           </h3>
-          <div className="text-5xl font-bold mb-4">
+          <div className="text-4xl sm:text-5xl font-bold mb-4 break-words">
             {currency} {budgetBreakdown.total.toLocaleString()}
           </div>
-          <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+          <div className="grid grid-cols-1 xs:grid-cols-2 gap-3 sm:gap-4 max-w-md mx-auto">
             <div className="bg-white bg-opacity-20 rounded-lg p-3">
-              <div className="text-sm opacity-90">Per Person</div>
-              <div className="text-2xl font-semibold">
+              <div className="text-xs sm:text-sm opacity-90">Per Person</div>
+              <div className="text-xl sm:text-2xl font-semibold break-words">
                 {currency} {budgetBreakdown.perPerson.toLocaleString()}
               </div>
             </div>
             <div className="bg-white bg-opacity-20 rounded-lg p-3">
-              <div className="text-sm opacity-90">Daily Average</div>
-              <div className="text-2xl font-semibold">
+              <div className="text-xs sm:text-sm opacity-90">Daily Average</div>
+              <div className="text-xl sm:text-2xl font-semibold break-words">
                 {currency} {budgetBreakdown.dailyAverage.toLocaleString()}
               </div>
             </div>
@@ -82,34 +82,72 @@ export default function BudgetSection({
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Pie Chart */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-lg shadow p-4 sm:p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
             Budget Distribution
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={categories}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={(entry) => `${entry.name} (${calculatePercentage(entry.value)}%)`}
-                outerRadius={80}
-                fill="#8884d8"
-                dataKey="value"
-              >
-                {categories.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number) =>
-                  `${currency} ${value.toLocaleString()}`
-                }
-              />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+          {/* Mobile Chart */}
+          <div className="sm:hidden">
+            <ResponsiveContainer width="100%" height={350}>
+              <PieChart>
+                <Pie
+                  data={categories}
+                  cx="50%"
+                  cy="40%"
+                  labelLine={false}
+                  label={false}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {categories.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  formatter={(value: number) =>
+                    `${currency} ${value.toLocaleString()}`
+                  }
+                />
+                <Legend
+                  wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
+                  iconSize={10}
+                  formatter={(value, entry: any) => (
+                    <span className="text-xs">
+                      {value} ({calculatePercentage(entry.payload.value)}%)
+                    </span>
+                  )}
+                />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          {/* Desktop Chart */}
+          <div className="hidden sm:block">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={categories}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={(entry) => `${entry.name} (${calculatePercentage(entry.value)}%)`}
+                  outerRadius={80}
+                  fill="#8884d8"
+                  dataKey="value"
+                >
+                  {categories.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip
+                  formatter={(value: number) =>
+                    `${currency} ${value.toLocaleString()}`
+                  }
+                />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         </div>
 
         {/* Detailed Breakdown */}
@@ -151,7 +189,9 @@ export default function BudgetSection({
         <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900">Cost Summary</h3>
         </div>
-        <div className="overflow-x-auto">
+
+        {/* Desktop Table View */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
               <tr>
@@ -210,6 +250,66 @@ export default function BudgetSection({
               </tr>
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Card View */}
+        <div className="md:hidden divide-y divide-gray-200">
+          {categories.map((category, idx) => (
+            <div key={idx} className="px-4 py-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center">
+                  <div
+                    className="w-3 h-3 rounded-full mr-2"
+                    style={{ backgroundColor: category.color }}
+                  ></div>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {category.name}
+                  </span>
+                </div>
+                <span className="text-xs font-medium text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  {calculatePercentage(category.value)}%
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div>
+                  <span className="text-gray-500 block text-xs mb-1">Total</span>
+                  <span className="text-gray-900 font-medium">
+                    {currency} {category.value.toLocaleString()}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-gray-500 block text-xs mb-1">Per Person</span>
+                  <span className="text-gray-600 font-medium">
+                    {currency} {(category.value / travelers).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+          ))}
+
+          {/* Mobile Total */}
+          <div className="px-4 py-4 bg-gray-50">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-bold text-gray-900">Total</span>
+              <span className="text-xs font-medium text-gray-500 bg-gray-200 px-2 py-1 rounded">
+                100%
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-sm">
+              <div>
+                <span className="text-gray-500 block text-xs mb-1">Total</span>
+                <span className="text-gray-900 font-bold">
+                  {currency} {budgetBreakdown.total.toLocaleString()}
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-500 block text-xs mb-1">Per Person</span>
+                <span className="text-gray-900 font-bold">
+                  {currency} {budgetBreakdown.perPerson.toLocaleString()}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

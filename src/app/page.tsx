@@ -16,6 +16,7 @@ export default function Home() {
   const router = useRouter();
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [teaserData, setTeaserData] = useState({
     destination: '',
     days: 3,
@@ -63,7 +64,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Navigation */}
       <nav className="fixed top-0 w-full z-50 bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -76,6 +77,8 @@ export default function Home() {
               </div>
               <span className="text-2xl font-bold text-gray-900 font-display">AiTravello</span>
             </div>
+
+            {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
               <a href="#destinations" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
                 Destinations
@@ -122,23 +125,149 @@ export default function Home() {
                 </>
               )}
             </div>
+
+            {/* Mobile menu button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors relative z-50"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              )}
+            </button>
           </div>
         </div>
       </nav>
 
+      {/* Mobile Navigation Drawer */}
+      {mobileMenuOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden transition-opacity duration-300"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{ animation: 'fadeIn 0.3s ease-out' }}
+          ></div>
+
+          {/* Drawer */}
+          <div
+            className="fixed top-0 right-0 h-full w-80 max-w-[85%] bg-white shadow-2xl z-50 md:hidden"
+            style={{ animation: 'slideInRight 0.3s ease-out' }}
+          >
+            <div className="flex flex-col h-full">
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h2 className="text-xl font-bold text-gray-900 font-display">Menu</h2>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+                  aria-label="Close menu"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Drawer Content */}
+              <div className="flex-1 overflow-y-auto py-6 px-4">
+                <div className="flex flex-col space-y-2">
+                  <a
+                    href="#destinations"
+                    className="px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Destinations
+                  </a>
+                  <a
+                    href="#features"
+                    className="px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Features
+                  </a>
+                  <a
+                    href="#how-it-works"
+                    className="px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors font-medium"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    How It Works
+                  </a>
+                  {session ? (
+                    <>
+                      <Link
+                        href="/dashboard"
+                        className="px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Dashboard
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        className="px-4 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition-colors font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </div>
+
+              {/* Drawer Footer - CTA Button */}
+              <div className="p-4 border-t border-gray-200">
+                {session ? (
+                  <Link
+                    href="/plan/new"
+                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl font-semibold text-center shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Create Plan
+                  </Link>
+                ) : (
+                  <Link
+                    href="/register"
+                    className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl font-semibold text-center shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Get Started Free
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </Link>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Hero Section - Creative Asymmetric Design */}
-      <section className="relative pt-32 pb-0 overflow-hidden bg-white">
+      <section className="relative pt-24 sm:pt-28 md:pt-32 pb-0 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative">
             {/* Floating Badge */}
             <motion.div
-              className="absolute top-0 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-20"
+              className="flex justify-center lg:justify-start lg:block mb-2 sm:mb-3 lg:mb-0 px-2"
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
               <motion.div
-                className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-full text-sm font-medium shadow-xl shadow-emerald-500/30"
+                className="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-emerald-400 to-teal-400 text-white rounded-full text-xs sm:text-sm font-medium shadow-xl shadow-emerald-500/30 whitespace-nowrap"
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
               >
@@ -147,12 +276,12 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start pt-16">
+            <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 items-start pt-8 sm:pt-12 lg:pt-16">
               {/* Left Content - 7 columns */}
               <div className="lg:col-span-7 space-y-8">
                 <div className="space-y-6">
                   <motion.h1
-                    className="text-6xl md:text-8xl font-black text-gray-900 leading-[1.2] tracking-tight font-display"
+                    className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-black text-gray-900 leading-[1.1] tracking-tight font-display text-center lg:text-left"
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.3 }}
@@ -169,7 +298,7 @@ export default function Home() {
                   </motion.h1>
 
                   <motion.p
-                    className="text-xl md:text-2xl text-gray-600 font-light max-w-xl leading-relaxed"
+                    className="text-lg sm:text-xl md:text-2xl text-gray-600 font-light max-w-xl leading-relaxed text-center lg:text-left mx-auto lg:mx-0"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.7 }}
@@ -180,7 +309,7 @@ export default function Home() {
 
                 {/* Stats */}
                 <motion.div
-                  className="flex flex-wrap gap-4 pt-4"
+                  className="flex flex-wrap justify-center lg:justify-start gap-4 pt-4"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.8, delay: 0.9 }}
@@ -217,15 +346,15 @@ export default function Home() {
                 {/* CTA Buttons */}
                 {session ? (
                   <motion.div
-                    className="flex flex-wrap gap-4 pt-4"
+                    className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 1.2 }}
                   >
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                       <Link
                         href="/plan/new"
-                        className="group px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center"
+                        className="group w-full sm:w-auto px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-base sm:text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center justify-center"
                       >
                         Start Planning
                         <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,15 +365,15 @@ export default function Home() {
                   </motion.div>
                 ) : (
                   <motion.div
-                    className="flex flex-wrap gap-4 pt-4"
+                    className="flex flex-col sm:flex-row gap-4 pt-4 w-full sm:w-auto"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 1.2 }}
                   >
-                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
                       <Link
                         href="/register"
-                        className="group px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center"
+                        className="group w-full sm:w-auto px-8 py-4 bg-gray-900 text-white rounded-2xl font-semibold text-base sm:text-lg hover:shadow-2xl hover:shadow-gray-900/30 transition-all duration-300 flex items-center justify-center"
                       >
                         Get Started Free
                         <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -252,19 +381,19 @@ export default function Home() {
                         </svg>
                       </Link>
                     </motion.div>
-                    <motion.a
-                      href="#destinations"
-                      className="px-8 py-4 border-2 border-gray-900 text-gray-900 rounded-2xl font-semibold text-lg hover:bg-gray-50 transition-all duration-300 flex items-center"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      Explore Destinations
-                    </motion.a>
+                    <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} className="w-full sm:w-auto">
+                      <a
+                        href="#destinations"
+                        className="w-full sm:w-auto px-8 py-4 border-2 border-gray-900 text-gray-900 rounded-2xl font-semibold text-base sm:text-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center"
+                      >
+                        Explore Destinations
+                      </a>
+                    </motion.div>
                   </motion.div>
                 )}
 
                 {/* Trust Indicators */}
-                <div className="flex flex-wrap gap-6 text-sm text-gray-500 pt-4">
+                <div className="flex flex-wrap justify-center lg:justify-start gap-6 text-sm text-gray-500 pt-4">
                   <div className="flex items-center gap-2">
                     <svg className="w-5 h-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
@@ -287,7 +416,7 @@ export default function Home() {
               </div>
 
               {/* Right Visual - 5 columns - Creative Image Collage */}
-              <div className="lg:col-span-5 relative h-[600px] lg:h-[700px]">
+              <div className="lg:col-span-5 relative h-[400px] sm:h-[500px] md:h-[600px] lg:h-[700px]">
                 {/* Main Image */}
                 <div className="absolute top-0 right-0 w-[85%] h-[55%] rounded-3xl overflow-hidden shadow-2xl transform rotate-2 hover:rotate-0 transition-transform duration-500">
                   <img
@@ -456,7 +585,7 @@ export default function Home() {
 
                   <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !teaserData.destination}
                     className="w-full px-8 py-4 bg-white text-gray-900 rounded-2xl font-bold text-lg hover:bg-gray-100 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {loading ? (
@@ -992,14 +1121,14 @@ export default function Home() {
         {preview && (
           <div className="space-y-6">
             {/* Hero stats */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/20 border border-blue-500/30 rounded-xl p-4 text-center">
-                <div className="text-2xl font-bold text-gray-900 mb-1">{preview.estimatedCost}</div>
-                <div className="text-xs text-blue-700">Estimated Budget</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-2 border-blue-500/30 rounded-2xl p-6 text-center hover:shadow-lg hover:shadow-blue-500/20 transition-all duration-300">
+                <div className="text-4xl font-black text-gray-900 mb-2 font-display">{preview.estimatedCost}</div>
+                <div className="text-sm font-semibold text-blue-700 uppercase tracking-wide">Estimated Budget</div>
               </div>
-              <div className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/20 border border-cyan-500/30 rounded-xl p-4 text-center">
-                <div className="text-sm font-semibold text-gray-900 mb-1">{preview.bestTimeToVisit}</div>
-                <div className="text-xs text-cyan-700">Best Time to Visit</div>
+              <div className="bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 border-2 border-cyan-500/30 rounded-2xl p-6 text-center hover:shadow-lg hover:shadow-cyan-500/20 transition-all duration-300">
+                <div className="text-base font-bold text-gray-900 mb-2 leading-tight">{preview.bestTimeToVisit}</div>
+                <div className="text-sm font-semibold text-cyan-700 uppercase tracking-wide">Best Time to Visit</div>
               </div>
             </div>
 
@@ -1038,7 +1167,7 @@ export default function Home() {
                       <svg className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                       </svg>
-                      {highlight}
+                      <span className="text-left">{highlight}</span>
                     </li>
                   ))}
                 </ul>
@@ -1059,11 +1188,11 @@ export default function Home() {
                       <svg className="w-4 h-4 text-cyan-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd" />
                       </svg>
-                      {place}
+                      <span className="text-left">{place}</span>
                     </li>
                   ))}
                   {preview.mustSee.length > 4 && (
-                    <li className="text-xs text-blue-600 font-medium pl-6 pt-1">
+                    <li className="text-xs text-blue-600 font-medium pl-6 pt-1 text-left">
                       + {preview.mustSee.length - 4} more iconic locations in full plan
                     </li>
                   )}
@@ -1073,28 +1202,28 @@ export default function Home() {
 
             {/* Hidden Gems - Curiosity Driver */}
             <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border-2 border-amber-500/30 rounded-xl p-5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-3xl"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/20 rounded-full blur-3xl"></div>
               <div className="relative">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-base font-bold text-white flex items-center">
-                    <svg className="w-5 h-5 mr-2 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <h3 className="text-base font-bold text-gray-900 flex items-center">
+                    <svg className="w-5 h-5 mr-2 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
                     </svg>
                     Local Hidden Gems
-                    <span className="ml-2 px-2 py-0.5 bg-amber-500/20 text-amber-300 text-xs font-bold rounded-full">Secret Spots</span>
+                    <span className="ml-2 px-2 py-0.5 bg-amber-500/20 text-amber-900 text-xs font-bold rounded-full">Secret Spots</span>
                   </h3>
                 </div>
                 <ul className="space-y-2.5 mb-4">
                   {preview.hiddenGems.map((gem, idx) => (
-                    <li key={idx} className="flex items-start text-sm text-gray-200 leading-snug">
-                      <svg className="w-4 h-4 text-amber-400 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <li key={idx} className="flex items-start text-sm text-gray-800 leading-snug">
+                      <svg className="w-4 h-4 text-amber-600 mr-2 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
-                      {gem}
+                      <span className="text-left">{gem}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="text-xs text-amber-200/80 italic">
+                <p className="text-xs text-gray-700 italic">
                   These are places most tourists never discover. Want to know more insider secrets?
                 </p>
               </div>
@@ -1102,17 +1231,17 @@ export default function Home() {
 
             {/* Budget Tip */}
             <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-4">
-              <h3 className="text-sm font-bold text-white mb-2 flex items-center">
-                <svg className="w-5 h-5 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <h3 className="text-sm font-bold text-gray-900 mb-2 flex items-center">
+                <svg className="w-5 h-5 mr-2 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Pro Budget Tip
               </h3>
-              <p className="text-sm text-gray-200">{preview.budgetTip}</p>
+              <p className="text-sm text-gray-800">{preview.budgetTip}</p>
             </div>
 
             {/* What's Missing Tease */}
-            <div className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 border border-slate-600/30 rounded-xl p-5">
+            <div className="bg-gradient-to-r from-slate-700/60 to-slate-600/60 border border-slate-500/40 rounded-xl p-5">
               <h3 className="text-sm font-bold text-white mb-3">
                 What you&apos;ll get in the full itinerary:
               </h3>
@@ -1127,9 +1256,9 @@ export default function Home() {
                   { icon: '📱', text: 'Emergency contacts & tips' },
                   { icon: '📄', text: 'Downloadable PDF guide' },
                 ].map((item, idx) => (
-                  <div key={idx} className="flex items-center text-gray-300">
-                    <span className="mr-2 text-base">{item.icon}</span>
-                    <span>{item.text}</span>
+                  <div key={idx} className="flex items-start text-gray-100">
+                    <span className="mr-2 text-base flex-shrink-0">{item.icon}</span>
+                    <span className="text-left">{item.text}</span>
                   </div>
                 ))}
               </div>

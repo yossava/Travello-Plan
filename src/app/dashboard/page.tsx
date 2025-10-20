@@ -131,10 +131,10 @@ export default function DashboardPage() {
                 <div className="h-12 w-1 bg-gradient-to-b from-blue-600 via-cyan-500 to-purple-600 rounded-full"></div>
                 <div>
                   <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">Dashboard</p>
-                  <h1 className="text-5xl md:text-6xl font-black text-gray-900 font-display leading-tight">
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 font-display leading-tight">
                     Welcome back,
                   </h1>
-                  <h2 className="text-4xl md:text-5xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent font-display leading-tight">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent font-display leading-tight truncate">
                     {session?.user?.name?.split(' ')[0]}
                   </h2>
                 </div>
@@ -193,9 +193,9 @@ export default function DashboardPage() {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Total Trips - Premium Card */}
-                <div className="md:col-span-2 lg:col-span-1">
+                <div className="sm:col-span-2 lg:col-span-1">
                   <div className="relative group h-full min-h-[200px]">
                     <div className="absolute -inset-0.5 bg-gradient-to-br from-blue-600 via-cyan-500 to-blue-400 rounded-2xl blur-lg opacity-30 group-hover:opacity-50 transition duration-500"></div>
                     <div className="relative h-full bg-gradient-to-br from-blue-600 via-blue-500 to-cyan-500 rounded-2xl p-6 shadow-xl flex flex-col justify-between overflow-hidden">

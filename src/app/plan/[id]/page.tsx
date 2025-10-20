@@ -325,12 +325,12 @@ export default function PlanDetailPage() {
   }
 
   const tabs = [
-    { id: 'overview', name: 'Overview' },
-    { id: 'flights', name: 'Flights', disabled: !plan.itinerary },
-    { id: 'accommodation', name: 'Accommodation', disabled: !plan.itinerary },
-    { id: 'itinerary', name: 'Daily Itinerary', disabled: !plan.itinerary },
-    { id: 'budget', name: 'Budget', disabled: !plan.itinerary },
-    { id: 'info', name: 'Travel Info', disabled: !plan.itinerary },
+    { id: 'overview', name: 'Overview', shortName: 'Overview' },
+    { id: 'flights', name: 'Flights', shortName: 'Flights', disabled: !plan.itinerary },
+    { id: 'accommodation', name: 'Accommodation', shortName: 'Hotels', disabled: !plan.itinerary },
+    { id: 'itinerary', name: 'Daily Itinerary', shortName: 'Itinerary', disabled: !plan.itinerary },
+    { id: 'budget', name: 'Budget', shortName: 'Budget', disabled: !plan.itinerary },
+    { id: 'info', name: 'Travel Info', shortName: 'Info', disabled: !plan.itinerary },
   ];
 
   const getStatusVariant = (status: string) => {
@@ -350,12 +350,12 @@ export default function PlanDetailPage() {
     <AppLayout>
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mb-6 flex flex-col gap-4">
           <div className="flex-1">
-            <h1 className="text-4xl font-bold text-gray-900 mb-2 font-display">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 font-display">
               {plan.planName}
             </h1>
-            <p className="text-gray-600 flex items-center">
+            <p className="text-sm sm:text-base text-gray-600 flex items-center flex-wrap">
               <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -365,9 +365,11 @@ export default function PlanDetailPage() {
               {new Date(plan.returnDate).toLocaleDateString()}
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Link href="/dashboard">
-              <Button variant="secondary" leftIcon={
+
+          {/* Mobile: Stack buttons vertically */}
+          <div className="flex flex-col sm:flex-row gap-2 sm:flex-wrap">
+            <Link href="/dashboard" className="w-full sm:w-auto">
+              <Button variant="secondary" fullWidth className="sm:w-auto" leftIcon={
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -377,22 +379,11 @@ export default function PlanDetailPage() {
             </Link>
             {plan.itinerary && !isEditMode && (
               <>
-                {plan.status !== 'finalized' && (
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsEditMode(true)}
-                    leftIcon={
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                      </svg>
-                    }
-                  >
-                    Edit
-                  </Button>
-                )}
                 {plan.status === 'generated' && (
                   <Button
                     variant="gradient"
+                    fullWidth
+                    className="sm:w-auto"
                     onClick={handleFinalizePlan}
                     leftIcon={
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -405,6 +396,8 @@ export default function PlanDetailPage() {
                 )}
                 <Button
                   variant="outline"
+                  fullWidth
+                  className="sm:w-auto"
                   onClick={handleExportPDF}
                   leftIcon={
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -414,14 +407,41 @@ export default function PlanDetailPage() {
                 >
                   Export PDF
                 </Button>
+                {plan.status !== 'finalized' && (
+                  <Button
+                    variant="outline"
+                    fullWidth
+                    className="sm:w-auto"
+                    onClick={() => setIsEditMode(true)}
+                    leftIcon={
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    }
+                  >
+                    Edit Plan
+                  </Button>
+                )}
               </>
             )}
             {isEditMode && (
               <>
-                <Button variant="secondary" onClick={handleCancelEdit} disabled={isSaving}>
+                <Button
+                  variant="secondary"
+                  fullWidth
+                  className="sm:w-auto"
+                  onClick={handleCancelEdit}
+                  disabled={isSaving}
+                >
                   Cancel
                 </Button>
-                <Button variant="gradient" onClick={handleSaveChanges} loading={isSaving}>
+                <Button
+                  variant="gradient"
+                  fullWidth
+                  className="sm:w-auto"
+                  onClick={handleSaveChanges}
+                  loading={isSaving}
+                >
                   {isSaving ? 'Saving...' : 'Save Changes'}
                 </Button>
               </>
@@ -491,7 +511,7 @@ export default function PlanDetailPage() {
 
         {/* Tabs */}
         <div className="border-b border-gray-200 mb-6">
-          <nav className="-mb-px flex space-x-8 overflow-x-auto">
+          <nav className="-mb-px flex space-x-4 sm:space-x-8 overflow-x-auto pb-px scrollbar-hide">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -503,9 +523,10 @@ export default function PlanDetailPage() {
                     : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
                 } ${
                   tab.disabled ? 'opacity-50 cursor-not-allowed' : ''
-                } whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-sm transition-all`}
+                } whitespace-nowrap py-4 px-1 border-b-2 font-semibold text-xs sm:text-sm transition-all flex-shrink-0`}
               >
-                {tab.name}
+                <span className="hidden sm:inline">{tab.name}</span>
+                <span className="sm:hidden">{tab.shortName}</span>
               </button>
             ))}
           </nav>

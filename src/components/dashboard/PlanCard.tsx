@@ -87,7 +87,7 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </div>
-                <span className="text-sm font-bold text-gray-700">
+                <span className="text-sm font-bold text-gray-700 truncate">
                   {plan.destination.city}, {plan.destination.country}
                 </span>
               </div>
@@ -131,9 +131,9 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
           {/* Actions */}
           <div className="flex gap-3">
             <Link href={`/plan/${plan.id}`} className="flex-1">
-              <button className="w-full relative px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02] transition-all duration-300 overflow-hidden group/btn">
+              <button className="w-full relative px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl font-bold text-sm hover:shadow-xl hover:shadow-blue-500/40 hover:scale-[1.02] transition-all duration-300 overflow-hidden group/btn">
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-600 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300"></div>
-                <span className="relative z-10 flex items-center justify-center gap-2">
+                <span className="relative z-10 flex items-center justify-center gap-2 whitespace-nowrap">
                   {plan.status === 'draft' ? 'Continue Planning' : 'View Plan'}
                   <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
@@ -143,7 +143,7 @@ export default function PlanCard({ plan, onDelete }: PlanCardProps) {
             </Link>
             <button
               onClick={() => onDelete(plan.id)}
-              className="inline-flex items-center justify-center px-4 py-3 border-2 border-gray-200 text-sm font-bold rounded-xl text-gray-600 bg-white hover:bg-red-50 hover:border-red-300 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500/50 hover:scale-105 transition-all duration-300"
+              className="inline-flex items-center justify-center px-3 sm:px-4 py-3 border-2 border-gray-200 text-sm font-bold rounded-xl text-gray-600 bg-white hover:bg-red-50 hover:border-red-300 hover:text-red-600 focus:outline-none focus:ring-2 focus:ring-red-500/50 hover:scale-105 transition-all duration-300 flex-shrink-0"
               title="Delete plan"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

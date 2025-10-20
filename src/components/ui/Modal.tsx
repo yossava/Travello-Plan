@@ -60,7 +60,7 @@ export default function Modal({
           &#8203;
         </span>
 
-        <div className={`inline-block align-bottom bg-white border border-gray-200 rounded-2xl px-4 pt-5 pb-4 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle ${sizeClasses[size]} sm:w-full sm:p-6`}>
+        <div className={`inline-block align-bottom bg-white border border-gray-200 rounded-2xl px-3 pt-5 pb-4 sm:px-4 text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle w-full ${sizeClasses[size]} sm:p-6`}>
           <div>
             <div className="mt-3 text-center sm:mt-0 sm:text-left">
               {typeof title === 'string' ? (
