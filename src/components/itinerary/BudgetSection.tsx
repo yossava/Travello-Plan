@@ -112,9 +112,9 @@ export default function BudgetSection({
                 <Legend
                   wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }}
                   iconSize={10}
-                  formatter={(value, entry: any) => (
+                  formatter={(value, entry) => (
                     <span className="text-xs">
-                      {value} ({calculatePercentage(entry.payload.value)}%)
+                      {value} ({calculatePercentage((entry as { payload: { value: number } }).payload.value)}%)
                     </span>
                   )}
                 />
