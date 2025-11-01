@@ -70,12 +70,20 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+              <img
+                src="/aitravello-logo.png"
+                alt="AiTravello Logo"
+                className="w-10 h-10 object-contain"
+              />
+              <div className="flex flex-col">
+                <div className="text-2xl font-bold font-display leading-tight">
+                  <span className="text-[#3B9DD4]">ai</span>
+                  <span className="text-[#1E3A8A]">travello</span>
+                </div>
+                <div className="text-[9px] text-gray-500 tracking-tight font-medium mt-0.5 uppercase">
+                  PLAN. BUDGET. DISCOVER
+                </div>
               </div>
-              <span className="text-2xl font-bold text-gray-900 font-display">AiTravello</span>
             </div>
 
             {/* Desktop Navigation */}
@@ -1073,12 +1081,20 @@ export default function Home() {
           <div className="grid md:grid-cols-12 gap-12 mb-12">
             <div className="md:col-span-5">
               <div className="flex items-center space-x-3 mb-6">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-xl flex items-center justify-center">
-                  <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
+                <img
+                  src="/aitravello-logo.png"
+                  alt="AiTravello Logo"
+                  className="w-12 h-12 object-contain"
+                />
+                <div className="flex flex-col">
+                  <div className="text-3xl font-black font-display leading-tight">
+                    <span className="text-[#3B9DD4]">ai</span>
+                    <span className="text-white">travello</span>
+                  </div>
+                  <div className="text-[11px] text-gray-400 tracking-tight font-medium mt-1 uppercase">
+                    PLAN. BUDGET. DISCOVER
+                  </div>
                 </div>
-                <span className="text-3xl font-black font-display">AiTravello</span>
               </div>
               <p className="text-gray-400 max-w-sm text-lg font-light leading-relaxed">
                 The future of travel planning. Powered by GPT-4o to create extraordinary journeys.
@@ -1117,7 +1133,7 @@ export default function Home() {
           </div>
 
           <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-gray-500 text-sm">&copy; 2024 AiTravello. All rights reserved.</p>
+            <p className="text-gray-500 text-sm">&copy; 2024 aitravello. All rights reserved. Designed & Developed by Yoss</p>
             <div className="flex gap-6 text-sm text-gray-500">
               <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
               <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>

@@ -14,12 +14,20 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex items-center space-x-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-md">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+              <img
+                src="/aitravello-logo.png"
+                alt="AiTravello Logo"
+                className="w-10 h-10 object-contain group-hover:scale-110 transition-transform"
+              />
+              <div className="flex flex-col">
+                <div className="text-xl font-bold font-display leading-tight">
+                  <span className="text-[#3B9DD4]">ai</span>
+                  <span className="text-[#1E3A8A]">travello</span>
+                </div>
+                <div className="text-[7.5px] text-gray-500 tracking-tight font-medium mt-0.5 uppercase">
+                  PLAN. BUDGET. DISCOVER
+                </div>
               </div>
-              <span className="text-xl font-bold text-gray-900 font-display">AiTravello</span>
             </Link>
           </div>
 
